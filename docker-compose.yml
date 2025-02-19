@@ -27,6 +27,7 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_HOST=postgres
       - POSTGRES_DB=soundscape_db
+      - JWT_SECRET=${JWT_SECRET}
 
   python_nlp:
     build:

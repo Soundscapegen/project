@@ -5,9 +5,14 @@ const bodyParser = require('body-parser')
 const app = express()
 const port = 3001;
 const redisClient = require('./db/redis');
+const { OAuth2Client } = require("google-auth-library");
+const jwt = require("jsonwebtoken");
+const db = require('./db/db');
 
 app.use(express.json())
 app.use(cors())
+
+const client = new OAuth2Client("643417108125-92fhmqq0nafhdgd6d2juchkcrv3fos5d.apps.googleusercontent.com");
 
 // this exists to separate the client from the server and gateway so that processing can be handled intermediately
 // allows us to protect python/nlp side from invalid or malicious requests and to keep everything in one place
@@ -30,6 +35,47 @@ async function waitForPythonService(maxAttempts = 10) {
     console.log("Warning: Python service not ready after all attempts, but continuing startup...");
     return false;
 }
+
+// Google Login
+app.post("/api/auth/google", async (req, res) => {
+    const { token } = req.body;
+  
+    try {
+      const ticket = await client.verifyIdToken({
+        idToken: token,
+        audience: "643417108125-92fhmqq0nafhdgd6d2juchkcrv3fos5d.apps.googleusercontent.com",
+      });
+  
+      const payload = ticket.getPayload();
+      const googleId = payload.sub;
+      const email = payload.email;
+      const username = payload.name;
+  
+      let user = await db("User").where({ google_id: googleId }).first();
+  
+      if (!user) {
+        [user] = await db("User")
+          .insert({
+            google_id: googleId,
+            email,
+            username,
+            created_at: db.fn.now(),
+            updated_at: db.fn.now(),
+          })
+          .returning("*");
+      }
+  
+      // Generate a JWT token
+      const authToken = jwt.sign({ userId: user.user_id }, process.env.JWT_SECRET, {
+        expiresIn: "7d",
+      });
+  
+      res.json({ success: true, user, token: authToken });
+    } catch (error) {
+      console.error("Authentication error:", error);
+      res.status(401).json({ success: false, message: "Invalid Google token" });
+    }
+});
 
 app.post('/api/keywords', async (req, res) => {
     console.log("Receiving POST request to /keywords endpoint")

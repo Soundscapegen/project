@@ -11,8 +11,13 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "google-one-tap": "^1.0.6",
+    "install": "^0.13.0",
+    "jsonwebtoken": "^9.0.2",
     "knex": "^3.1.0",
+    "npm": "^11.1.0",
     "pg": "^8.13.2",
     "pg-pool": "^3.7.0",
     "react": "^19.0.0",

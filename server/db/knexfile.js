@@ -1,11 +1,12 @@
 module.exports = {
   development: {
-    client: 'postgresql',
+    client: 'pg',
     connection: {
-      host: 'localhost',
-      database: 'soundscape_db',
-      user: 'postgres',
-      password: 'postgres',
+      host:     process.env.DB_HOST     || 'postgres',
+      database: process.env.DB_NAME     || 'soundscape_db',
+      user:     process.env.DB_USER     || 'postgres',
+      password: process.env.DB_PASSWORD || 'postgres',
+      port:     process.env.DB_PORT     || 5432,
     },
     migrations: {
       directory: './migrations',
@@ -13,5 +14,5 @@ module.exports = {
     seeds: {
       directory: './seeds',
     },
-  }
+  },
 };
