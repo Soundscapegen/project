@@ -1,9 +1,21 @@
 "use client";
 import { useState } from "react";
+
+// import { Search, AudioLines, SlidersHorizontal } from "lucide-react";
+
+import Navbar from "../../components/Navbar/Navbar";
+import RecentlyCard from "../../components/RecentlyCards/RecentlyCard";
+import TrackCard from "../../components/TrackCards/TrackCard";
+import Category from "../../components/Category/Category";
+import About from "../../components/About/About";
+
 import { KeywordResponse, SoundscapeDetails, SoundscapeResponse } from "./types/soundscape";
 import { getKeywords, downloadSound, createSoundscape, getSoundscapeById } from "./services/soundscapeService";
 
+
 export default function Home() {
+  const [user, setUser] = useState(false);
+
   const [inputString, setInputString] = useState("");
   const [response, setResponse] = useState<KeywordResponse | null>(null);
   const [isCreatingSoundscape, setIsCreatingSoundscape] = useState(false);
@@ -71,7 +83,24 @@ export default function Home() {
 
   return (
     <div>
-      <h1>SoundscapeGen</h1>
+      <Navbar user={user} setUser={setUser} />
+
+      <div className="introduction">
+        {/* <AudioLines className="sound-icon" /> */}
+        <img src="/sound-waves.svg" alt="Sound Waves" className="sound-icon" />
+        <p className="description">
+          <strong>SoundscapeGen</strong> lets you create custom <br />
+          soundscapes by  simply describing what you want to <br /> hear.
+        </p>
+      </div>
+
+      <div className="search-box">
+        <input type="text" className="text" placeholder="Enter what you want to hear" />
+        <button>
+          {/* <Search className="search-icon" /> */}
+          <span className="search-icon">S</span>
+        </button>
+      </div>
       
       <div className="tabs">
         <button 
@@ -157,6 +186,50 @@ export default function Home() {
           )}
         </div>
       )}
+
+      {user && (
+        <div className="recently-listen">
+          <h2>Recently Listen</h2>
+          <div className="dash3"></div>
+          <div className="listen-container">
+            <RecentlyCard />
+            <RecentlyCard />
+            <RecentlyCard />
+            <RecentlyCard />
+            <RecentlyCard />
+            <RecentlyCard />
+            <RecentlyCard />
+          </div>
+        </div>
+      )}
+
+      <div className="popular">
+        <h2>Popular Sounds</h2>
+        <div className="dash3"></div>
+        <h3 className="category-title">Category</h3>
+        <div className="popular-container">
+          <Category />
+          <div className="category-tracks">
+            <div className="track-subcate-container">
+              <div className="chosenCategory">
+                <p className="chosen">Nature</p>
+                <p className="chosen">Ocean Waves</p>
+              </div>
+              {/* <SlidersHorizontal className="filterIcon" /> */}
+              <span className="filterIcon">I</span>
+            </div>
+            <div className="tracks">
+              <TrackCard />
+              <TrackCard />
+              <TrackCard />
+              <TrackCard />
+              <TrackCard />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <About />
     </div>
   );
 }
