@@ -1,0 +1,12 @@
+.mixer-container {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    align-items: center;
+    gap: 16px;
+  }
+  .mixer-heading {
+    text-align: center;
+    margin-top: 20px;
+  }  
+  

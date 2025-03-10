@@ -37,6 +37,7 @@ services:
       - FREESOUND_API_KEY=${FREESOUND_API_KEY}
     volumes:
       - ./server:/app
+      - /app/node_modules
       - ./server/public:/app/public
 
   python_nlp:
