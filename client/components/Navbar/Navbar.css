@@ -36,16 +36,17 @@ nav {
     padding: 0px 30px;
 }
 
-.navLinks li a{
+.nav-btn {
     transition: all 0.3s ease 0s;
     font-family: Inria Sans;
     font-weight: 700;
     font-size: 20px;
     color: #1E1E1E;
     text-decoration: none;
+    background: transparent;
 }
 
-.navLinks li a:hover {
+.nav-btn:hover {
     padding: 8px;
     border-radius: 24px;
     color: white;
@@ -57,6 +58,7 @@ nav {
 .profile {
     display: flex;
     justify-content: center;
+    /* margin-left: 40px; */
 }
 
 .profile ul {

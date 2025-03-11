@@ -125,8 +125,14 @@ export default function Home() {
           onChange={(e) => setInputString(e.target.value)}
           placeholder="Enter what you want to hear"
         />
+
         <button onClick={handleSubmit}>
-          <span className="search-icon">S</span>
+          <svg id="Search--Streamline-Carbon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" height="24" width="24">
+            <desc>Search Streamline Icon: https://streamlinehq.com</desc>
+            <defs></defs>
+            <path d="m21.75 20.689425 -5.664075 -5.664075a8.263275 8.263275 0 1 0 -1.060575 1.060575L20.689425 21.75ZM3 9.75a6.75 6.75 0 1 1 6.75 6.75 6.7575 6.7575 0 0 1 -6.75 -6.75Z" fill="#f4671f" stroke-width="0.75"></path>
+            <path id="_Transparent_Rectangle_" d="M0 0h24v24H0Z" fill="none" stroke-width="0.75"></path>
+          </svg>
         </button>
       </div>
 
@@ -201,7 +207,7 @@ export default function Home() {
         </div>
       )}
 
-      <div className="popular">
+      <div id="popular" className="popular">
         <h2>Popular Sounds</h2>
         <div className="dash3"></div>
         <h3 className="category-title">Category</h3>
@@ -213,8 +219,14 @@ export default function Home() {
                 <p className="chosen">Nature</p>
                 <p className="chosen">Ocean Waves</p>
               </div>
-              {/* <SlidersHorizontal className="filterIcon" /> */}
-              <span className="filterIcon">I</span>
+              <div>
+                <svg id="Filter--Streamline-Carbon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" height="32" width="32">
+                  <desc>Filter Streamline Icon: https://streamlinehq.com</desc>
+                  <defs></defs>
+                  <title>filter</title>
+                  <path d="M18 28h-4a2 2 0 0 1 -2 -2v-7.59L4.59 11A2 2 0 0 1 4 9.59V6a2 2 0 0 1 2 -2h20a2 2 0 0 1 2 2v3.59a2 2 0 0 1 -0.59 1.41L20 18.41V26a2 2 0 0 1 -2 2ZM6 6v3.59l8 8V26h4v-8.41l8 -8V6Z" fill="#f4671f" stroke-width="1"></path><path id="_Transparent_Rectangle_" d="M0 0h32v32H0Z" fill="none" stroke-width="1"></path>
+                </svg>
+              </div>
             </div>
             <div className="tracks">
               <TrackCard />
@@ -227,7 +239,9 @@ export default function Home() {
         </div>
       </div>
 
-      <About />
+      <div id="about">
+        <About />
+      </div>
     </div>
   );
 }

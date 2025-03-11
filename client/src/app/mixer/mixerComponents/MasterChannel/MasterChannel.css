@@ -1,0 +1,38 @@
+.master-digital p {
+    color: #F4681F;
+}
+
+.master-mute {
+    width: 70%;
+}
+
+.master-btn {
+    width: 90%;
+    margin: auto;
+    margin-top: 2px;
+}
+
+.master-btn button{
+    font-size: 10px;
+}
+
+.master-label {
+    background-color: #F4681F;
+    box-shadow: 1px 1px 2px 0px rgba(255, 166, 50, 0.30) inset,
+                -1px -1px 2px 0px rgba(98, 42, 12, 0.50) inset,
+                -1px 1px 2px 0px rgba(98, 42, 12, 0.20),
+                1px -1px 2px 0px rgba(98, 42, 12, 0.20),
+                -1px -1px 2px 0px rgba(255, 166, 50, 0.90),
+                1px 1px 3px 0px rgba(98, 42, 12, 0.90);
+}
+
+.master-control::-webkit-slider-thumb {
+    background: linear-gradient(180deg, #F14A21 0%, #F4671F 75%, #F7861C 100%);
+    border: 1px solid #b13e00;  
+} 
+
+.master-label p {
+    color: white;
+    font-weight: 600;
+}
+

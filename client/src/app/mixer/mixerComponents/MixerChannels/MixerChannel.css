@@ -1,0 +1,251 @@
+
+.mixer-channel-container {
+    width: 114px;
+    height: 639px;
+    background: linear-gradient(135deg, #989898 100%, #8A8A8A 0%);
+    box-shadow: -1px 1px 2px 0px rgba(162, 162, 162, 0.30) inset, 1px -1px 2px 0px rgba(128, 128, 128, 0.50) inset, 3px 3px 6px 0px rgba(128, 128, 128, 0.20), -3px -3px 6px 0px rgba(128, 128, 128, 0.20), 3px -3px 6px 0px rgba(162, 162, 162, 0.90), -3px 3px 8px 0px rgba(128, 128, 128, 0.90);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    font-family: "Share Tech Mono";
+}
+
+.mixer-btn {
+    margin-top: 5px;
+    width: 108px;
+}
+
+.display-screen {
+    width: 98%;
+    height: 54px;
+    border: 1px solid #000;
+    background-color: #000;
+    color: #278F7C;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.display-screen p {
+    font-family: "Share Tech Mono";
+    font-size: 24px;
+    font-weight: 400;
+}
+
+.knob-container {
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.track-knob {
+    width: 99%;
+    height: 10px;
+    background: #0D0F10;
+    box-shadow: 1px -1px 2px 0px rgba(21, 24, 26, 0.30), -1px 1px 2px 0px rgba(5, 6, 6, 0.50), -1px -1px 2px 0px rgba(5, 6, 6, 0.20) inset, 1px 1px 2px 0px rgba(5, 6, 6, 0.20) inset, -1px 1px 2px 0px rgba(21, 24, 26, 0.90) inset, 1px -1px 3px 0px rgba(5, 6, 6, 0.90) inset;
+    position: absolute;
+}
+
+.knob {
+    width: 21px;
+    height: 21px;
+    border-radius: 50%;
+    background: linear-gradient(146deg, #111315 15.24%, #414344 100%);
+    box-shadow: 1px 1px 2px 0px rgba(63, 66, 69, 0.30) inset, -1px -1px 2px 0px rgba(19, 20, 21, 0.50) inset, -1px 1px 2px 0px rgba(19, 20, 21, 0.20), 1px -1px 2px 0px rgba(19, 20, 21, 0.20), -1px -1px 2px 0px rgba(63, 66, 69, 0.90), 1px 1px 3px 0px rgba(19, 20, 21, 0.90);
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    transition: left 0.2s ease-in-out;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.knob svg:hover {
+    transform: scale(1.1);
+}
+
+.buttons-container {
+    width: 99%;
+    margin-top: 22px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 10px;
+}
+
+.button {
+    width: 47px;
+    height: 19px;
+    border-radius: 2px;
+    background: #7A7A7A;
+    box-shadow: 2px 2px 2px 0px rgba(0, 0, 0, 0.25) inset;
+    overflow: hidden;
+}
+
+.btn {
+    width: 42px;
+    height: 14px;
+    border-radius: 2px;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.13) 0%, rgba(0, 0, 0, 0.00) 100%), #CFD0D2;
+    box-shadow: 2px 2px 1px 2px rgba(0, 0, 0, 0.40);
+    display: flex;
+    margin-left: 2px;
+    margin-top: 2px;
+}
+
+.btn button {
+    border: none;
+    background: transparent;
+    color: #5C5C5C;
+    text-align: center;
+    font-size: 8px;
+    font-weight: 700;
+    margin: auto;
+    cursor: pointer;
+}
+
+.btn button:hover {
+    transform: scale(1.2);
+    color: orangered;
+}
+
+.mute.active {
+    color: orangered;
+}
+
+.mixer-controls {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 98%;
+    height: 75%;
+    position: relative;
+}
+
+.volume-meter-container {
+    height: 95%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    margin: auto 18px;
+}
+
+.led-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: radial-gradient(50% 50% at 50% 50%, #54FA5B 0%, #7ED781 58.5%, #698269 87.9%, rgba(104, 255, 110, 0.34) 100%);
+    box-shadow: 1px 1px 2px 3px rgba(0, 0, 0, 0.25) inset;
+}
+
+.red {
+    background: radial-gradient(50% 50% at 50% 50%, #fa5454 0%, #e33f3f 58.5%, #b70707 87.9%, rgba(204, 133, 133, 0.207) 100%);
+}
+
+.volume-meter {
+    width: 8px;
+    height: 100%;
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+    stroke-width: 8px;
+    stroke: #7C7E80;
+    box-shadow: 1px 4px 4px 0px #000 inset;
+}
+
+.meter-fill {
+    width: 100%;
+    opacity: 0.4;
+    border-radius: 2px;
+    background: linear-gradient(180deg, #F14A21 0%, #F4671F 75%, #F7861C 100%);
+    position: absolute;
+    bottom: 0;
+    transition: height 0.2s ease-in-out; 
+}
+
+.volume-container {
+    width: 22px;
+    height: 95%;
+    background: #696969;
+    box-shadow: 1px -1px 2px 0px rgba(54, 57, 63, 0.30),
+                -1px 1px 2px 0px rgba(26, 27, 29, 0.50),
+                -1px -1px 2px 0px rgba(26, 27, 29, 0.20) inset,
+                1px 1px 2px 0px rgba(26, 27, 29, 0.20) inset,
+                -1px 1px 2px 0px rgba(54, 57, 63, 0.90) inset,
+                1px -1px 3px 0px rgba(26, 27, 29, 0.90) inset;
+    position: relative;
+    margin-left: 27px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.control-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+    width: 4px;
+    height: 95%;
+    transform: rotate(180deg);
+    stroke-width: 20px;
+    stroke: #403F3F;
+    box-shadow: 2px 4px 4px 0px #000 inset;
+}
+
+.control-volume {
+    width: 435px;
+    appearance: none;
+    transform: rotate(90deg);
+    background: transparent;
+    position: absolute;
+    cursor: pointer;
+}
+
+.control-volume::-webkit-slider-thumb {
+    appearance: none;
+    width: 42px;
+    height: 20px;
+    background: linear-gradient(145deg, silver, #ccc);
+    border-radius: 3px;
+    border: 1px solid #888;
+    cursor: pointer;
+    box-shadow: 
+        2px 2px 5px rgba(0, 0, 0, 0.5),
+        inset -2px -2px 5px rgba(0, 0, 0, 0.4),
+        inset 2px 2px 5px rgba(255, 255, 255, 0.2);
+}
+
+.audio {
+    appearance: none;
+    border: none;
+    background: transparent;
+}
+
+.channel-label {
+    border-radius: 2px;
+    width: 100%;
+    height: 32px;
+    opacity: 0.76;
+    padding-bottom:3px;
+    background: #FFF;
+    box-shadow: -1px -1px 2px 0px rgba(194, 194, 194, 0.5) inset,
+                -1px 1px 2px 0px rgba(98, 42, 12, 0.20),
+                1px -1px 2px 0px rgba(98, 42, 12, 0.20),
+                1px 1px 3px 0px rgba(98, 42, 12, 0.90);
+}
+
+.label {
+    color: #000;
+    text-align: center;
+    text-shadow: 1px 0px 0px rgba(0, 0, 0, 0.53);
+    font-size: 20px;
+    font-weight: 400;
+    margin-top: 7px;
+}

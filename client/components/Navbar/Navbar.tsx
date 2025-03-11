@@ -19,14 +19,12 @@ import React, {
     setUser: React.Dispatch<React.SetStateAction<boolean>>;
   }
   
-  // Possible screen types for controlling the overlay
   type ScreenType = 'login' | 'signup' | null;
   
   const Navbar: React.FC<NavbarProps> = ({ user, setUser }) => {
     const [screen, setScreen] = useState<ScreenType>(null);
     const [dropdown, setDropdown] = useState<boolean>(false);
   
-    // Use a ref to detect clicks outside of the dropdown
     const dropdownRef = useRef<HTMLDivElement>(null);
   
     const closeScreen = () => setScreen(null);
@@ -35,11 +33,16 @@ import React, {
       setUser(false);
       setDropdown(false);
     };
+
+    const scrollToSection = (sectionId) => {
+      const section = document.getElementById(sectionId);
+      if (section) {
+        section.scrollIntoView({ behavior: "smooth" });
+      }
+    };
   
     useEffect(() => {
-      // Generic Event is enough since we’re attaching to document
       function handleClickOutside(event: Event) {
-        // Type cast event.target so that .contains(...) is recognized
         if (
           dropdownRef.current &&
           !dropdownRef.current.contains(event.target as Node)
@@ -60,13 +63,17 @@ import React, {
           <nav className="navLinks">
             <ul>
               <li> {/* home page is both / and /home */}
-                <Link href="/">Home</Link>
+                <Link href="/" className="nav-btn">Home</Link>
               </li>
               <li>
-                <Link href="/popular">Popular</Link>
+                <button onClick={() => scrollToSection("popular")} className="nav-btn">
+                  Popular
+                </button>
               </li>
               <li>
-                <Link href="/about">About Us</Link>
+                <button onClick={() => scrollToSection("about")} className="nav-btn">
+                  About Us
+                </button>
               </li>
             </ul>
           </nav>

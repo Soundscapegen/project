@@ -1,21 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Merienda:wght@300..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Quicksand:wght@300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Merienda:wght@300..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Quicksand:wght@300..700&family=Share+Tech&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Merienda:wght@300..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Quicksand:wght@300..700&family=Share+Tech&family=Share+Tech+Mono&display=swap');
 
 :root {
   --Gradient: linear-gradient(180deg, #F14A21 0%, #F4671F 75%, #F7861C 100%);
-}
-
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
 }
 
 * {
@@ -23,9 +11,8 @@ code {
   padding: 0;
 }
 
-
 .introduction {
-  font-family: Poppins;
+  font-family: "Poppins", Poppins;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -81,12 +68,11 @@ input[type=text] {
   background-color: transparent;
 }
 
-.search-icon {
+.search-box svg {
   color: #F4671F;
   width: 24px;
   height: 24px;
   margin-right: 15px;
-
 }
 
 .recently-listen {
@@ -96,12 +82,13 @@ input[type=text] {
 }
 
 .dash3 {
-  width: 92%;
+  width: 93%;
   border: 1px #D1D1D1 solid;
   margin-bottom: 20px;
 }
 
 h2 {
+  font-family: "Poppins", Poppins;
   font-size: 24px;
   font-weight: bold;
 }

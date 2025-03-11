@@ -1,12 +1,102 @@
-.mixer-container {
+  .mixer-page {
+    margin: 0;
+    padding:0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 90px;
+    margin-top: 50px;
+}
+
+
+
+.auido-mixer-container{
     display: flex;
     flex-direction: column;
-    background-color: white;
+    justify-content: center;
     align-items: center;
-    gap: 16px;
+    width: 800px;
+    height: auto;
+    background: #F6F6F6;
+    box-shadow: -1px 1px 2px 0px rgba(255, 255, 255, 0.30) inset, 1px -1px 2px 0px rgba(170, 170, 170, 0.50) inset, 2px 2px 4px 0px rgba(170, 170, 170, 0.20), -2px -2px 4px 0px rgba(170, 170, 170, 0.20), 2px -2px 4px 0px rgba(255, 255, 255, 0.90), -2px 2px 5px 0px rgba(170, 170, 170, 0.90);
   }
-  .mixer-heading {
+  
+  .header-audio-mixer{
+    display: flex;
+    align-items: center;
+    gap: 40px; 
+  }
+  
+  .mixer-icon {
+    margin-left: 33px;
+  }
+
+  .logo-mixer {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .mix-button-container {
+    width: 111px;
+    height: 43px;
+    border-radius: 2px;
+    background: #7A7A7A;
+    box-shadow: 2px 2px 2px 0px rgba(0, 0, 0, 0.25) inset;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .mix-button {
+    width: 100px;
+    height: 33px;
+    border-radius: 2px;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.13) 0%, rgba(0, 0, 0, 0.00) 100%), #CFD0D2;
+    box-shadow: 2px 2px 1px 2px rgba(0, 0, 0, 0.40);
+    margin: auto;
+  }
+  
+  .mix-title {
+    margin-top: 5px;
     text-align: center;
-    margin-top: 20px;
-  }  
+    font-family: Helvetica;
+    font-size: 20px;
+    font-weight: 700;
+    background: var(--Gradient, linear-gradient(180deg, #F14A21 0%, #F4671F 75%, #F7861C 100%));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  
+  }
+  
+  .display-text {
+    width: 164px;
+    height: 43px;
+    border: 1px solid #000;
+    background-color: #000;
+    margin-left: 330px;
+  }
+  
+  .display-text p {
+    color: #278F7C;
+    font-family: "Share Tech Mono";
+    font-size: 24px;
+    font-weight: 400;
+    text-align: center;
+    margin-top: 8px;
+  }
+  
+  .header-audio-mixer {
+    display: flex;
+    width: 100%;
+    height: 77px;
+    align-items: center;
+    border-radius: 2px;
+    background: linear-gradient(6deg, #979797 11.24%, #BCBCBC 49.54%, #8E8E8E 95.61%);
+  }
+  
+  .mixer-channels-container {
+    display: flex;
+    flex-direction: row;
+  }
   

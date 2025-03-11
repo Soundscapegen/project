@@ -15,7 +15,10 @@
     height: 2px;
     background: #F4671F;
     border-radius: 9px;
-    
+}
+
+.input input[type="text"] {
+    margin-left: 0px;
 }
 
 .dash2 {

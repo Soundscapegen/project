@@ -23,9 +23,7 @@ const About = () => {
         For questions, support, or feedback, reach us at <a href="">link</a>
       </p>
 
-      <footer>
-        <p>This is a footer</p>
-      </footer>
+      
     </div>
   );
 };
