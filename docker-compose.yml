@@ -36,7 +36,8 @@ services:
       - POSTGRES_DB=soundscape_db
       - FREESOUND_API_KEY=${FREESOUND_API_KEY}
     volumes:
-      - ./server:/app
+      - ./server:/app:delegated
+      - server_node_modules:/app/node_modules
       - ./server/public:/app/public
 
   python_nlp:
@@ -73,3 +74,4 @@ services:
 volumes:
   postgres_data:
   redis_data:
+  server_node_modules:

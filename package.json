@@ -11,16 +11,18 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@hugeicons/core-free-icons": "^1.0.13",
+    "@hugeicons/react": "^1.0.5",
     "express": "^4.21.2",
     "knex": "^3.1.0",
     "pg": "^8.13.2",
     "pg-pool": "^3.7.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "redis": "^4.7.0"
   },
   "devDependencies": {
-    "@types/react": "^19.0.8",
-    "@types/react-dom": "^19.0.3"
+    "@types/react": "^18.2.57",
+    "@types/react-dom": "^18.2.19"
   }
 }

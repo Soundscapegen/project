@@ -281,3 +281,36 @@ app.listen(port, async () => {
     console.log(`Node API is available on http://localhost:${port}`);
     await waitForPythonService();
 });
+
+// redis homepage
+
+app.get('/api/homepage-sounds', async (req, res) => {
+    const cacheKey = 'homepage:sounds';
+    try {
+      // Check if the sounds are cached in Redis
+      if (redisClient.isReady) {
+        const cachedSounds = await redisClient.get(cacheKey);
+        if (cachedSounds) {
+          console.log('Cache hit for homepage sounds');
+          return res.status(200).json({ success: true, sounds: JSON.parse(cachedSounds) });
+        }
+      } else {
+        console.warn('Redis client not ready, skipping cache check');
+      }
+  
+      // If not cached, query the database.
+      const db = require('./db/config');
+      const result = await db.query('SELECT * FROM "Sound" LIMIT 3');
+      
+      // Cache the result in Redis for one hour (3600 seconds)
+      if (redisClient.isReady) {
+        await redisClient.set(cacheKey, JSON.stringify(result.rows), { EX: 3600 });
+      }
+      
+      return res.status(200).json({ success: true, sounds: result.rows });
+    } catch (error) {
+      console.error('Error fetching homepage sounds:', error);
+      return res.status(500).json({ success: false, message: 'Error fetching homepage sounds: ' + error.message });
+    }
+  });
+  
