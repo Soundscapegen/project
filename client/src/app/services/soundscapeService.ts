@@ -68,4 +68,21 @@ export async function getSoundscapeById(id: string): Promise<SoundscapeDetails> 
   }
 
   return await res.json();
+}
+
+export async function getTrackNames(sounds: Sound[]): Promise<Sound[]> {
+  const res = await fetch(`${API_BASE_URL}/api/track-names`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ sounds })
+  });
+
+  if (!res.ok) {
+    throw new Error(`Failed to get track names: HTTP Error Status: ${res.status}`);
+  }
+
+  const data = await res.json();
+  return data.success ? data.sounds : sounds; // Return original sounds as fallback
 } 

@@ -72,12 +72,12 @@ async function downloadAndSaveSound(freesoundId, sourceUrl, name, description, p
   }
 
   // We try preview URL if full download failed
-  if (!downloaded) {
+  if (!downloaded && previewUrl) { //**added && previewurl */
     if (previewUrl) {
       console.log(`Full sound download failed. Using preview URL instead: ${previewUrl}`);
       downloadUrl = previewUrl;
       try {
-        await downloadFile(downloadUrl, filePath);
+        await downloadFile(previewUrl, filePath); //changed** downloadurl to preview
         console.log(`Preview download successful`);
         downloaded = true;
       } catch (error) {
@@ -96,9 +96,21 @@ async function downloadAndSaveSound(freesoundId, sourceUrl, name, description, p
         return reject(err);
       }
       try {
+        // Check if a record with this source_url or file_path already exists
+        const existingResult = await db.query(
+          'SELECT * FROM "Sound" WHERE source_url = $1 OR file_path = $2',
+          [sourceUrl, `/sounds/${filename}`]
+        );
+        
+        if (existingResult.rows.length > 0) {
+          console.log(`Sound already exists in database with ID ${existingResult.rows[0].sound_id}`);
+          return resolve(existingResult.rows[0]);
+        }
+        
+        // If not exists, insert new record
         const result = await db.query(
-          'INSERT INTO "Sound" (source_url, freesound_id, file_path, name, description) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-          [sourceUrl, freesoundId, `/sounds/${filename}`, name, description]
+          'INSERT INTO "Sound" (source_url, freesound_id, file_path, name, description, preview_url) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+          [sourceUrl, freesoundId, `/sounds/${filename}`, name, description, previewUrl]
         );
         console.log(`Sound saved to database with ID ${result.rows[0].sound_id}`);
         resolve(result.rows[0]);
@@ -142,14 +154,28 @@ async function getSoundDetails(freesoundId) {
   });
 }
 
-// Look up a sound in the db by freesoundId
-async function getSoundByFreesoundId(freesoundId) {
+// Look up a sound in the db by freesoundId and sourceUrl
+async function getSoundByFreesoundId(freesoundId, sourceUrl) {
   try {
-    const result = await db.query(
-      'SELECT * FROM "Sound" WHERE freesound_id = $1',
-      [freesoundId]
-    );
-    return result.rows.length > 0 ? result.rows[0] : null;
+    // Always check by sourceUrl since most freesoundIds are 0
+    if (sourceUrl) {
+      const result = await db.query(
+        'SELECT * FROM "Sound" WHERE source_url = $1',
+        [sourceUrl]
+      );
+      return result.rows.length > 0 ? result.rows[0] : null;
+    }
+    
+    // Fallback to checking by freesoundId if sourceUrl not provided
+    if (freesoundId && freesoundId !== '0') {
+      const result = await db.query(
+        'SELECT * FROM "Sound" WHERE freesound_id = $1',
+        [freesoundId]
+      );
+      return result.rows.length > 0 ? result.rows[0] : null;
+    }
+    
+    return null;
   } catch (error) {
     console.error('Error checking if sound exists:', error);
     throw error;

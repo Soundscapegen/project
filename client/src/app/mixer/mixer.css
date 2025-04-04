@@ -1,0 +1,74 @@
+/* .mixer-container {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    align-items: center;
+    gap: 16px;
+  }
+  .mixer-heading {
+    text-align: center;
+    margin-top: 20px;
+  }  
+*/
+
+.mixer-container {
+  margin: 0 auto;
+  padding: 0;
+  padding-top: 20px;
+
+}
+  
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+    width: 100%;
+  }
+  
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid rgba(244, 103, 31, 0.2);
+    border-radius: 50%;
+    border-top-color: #F4671F;
+    animation: spin 1s ease-in-out infinite;
+    margin-bottom: 1rem;
+}
+  
+@keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+}
+  
+.error-container {
+    text-align: center;
+    padding: 3rem 1rem;
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+}
+  
+.error-container h2 {
+    color: #F14A21;
+    margin-bottom: 1rem;
+}
+  
+.back-button {
+    display: inline-block;
+    margin-top: 1.5rem;
+    padding: 0.75rem 1.5rem;
+    background: linear-gradient(180deg, #F14A21 0%, #F4671F 75%, #F7861C 100%);
+    color: white;
+    border-radius: 24px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: transform 0.2s ease;
+}
+  
+.back-button:hover {
+    transform: translateY(-2px);
+}  

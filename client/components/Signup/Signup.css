@@ -1,0 +1,32 @@
+.container {
+    margin-top: 50px;
+}
+
+.another {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    margin-left: 55px;
+    color: #797979;
+}
+
+.dash2 {
+    width: 120px;
+    height: 2px;
+    background: #F4671F;
+    border-radius: 9px;
+    
+}
+
+.dash2 {
+    margin-top: 10px;
+}
+
+.google {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    font-size: 40px;
+    margin-bottom: 25px;
+    cursor: pointer;
+}
