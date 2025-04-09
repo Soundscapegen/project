@@ -1,7 +1,9 @@
+require('dotenv').config();
 const fs = require('fs')
 const express = require('express')
 const cors = require('cors')
 const bodyParser = require('body-parser')
+const session = require('express-session')
 const app = express()
 const port = 3001;
 const redisClient = require('./db/redis');
@@ -11,10 +13,94 @@ const { cacheFetch } = require('./db/cache');
 //changed ** for combined audio download
 const ffmpeg = require('fluent-ffmpeg');
 const path = require('path');
+const passport = require('passport');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const authService = require('./services/authService');
 
 app.use(express.json())
-app.use(cors())
+app.use(express.urlencoded({ extended: true }))
+app.use(cors({
+  origin: ['http://localhost:3000', 'http://localhost:3001'],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}))
 app.use(express.static('public'));
+
+// Add session middleware BEFORE passport initialization
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'test-secret',
+  resave: false,
+  saveUninitialized: false,
+  cookie: { 
+    secure: process.env.NODE_ENV === 'production',
+    maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    sameSite: 'lax', // Allows cookies to be sent in cross-origin requests
+    httpOnly: true // for security
+  }
+}));
+
+// Initialize Passport AFTER session middleware
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Add this after passport initialization
+passport.serializeUser((user, done) => {
+  done(null, user.user_id);
+});
+
+passport.deserializeUser(async (id, done) => {
+  try {
+    const db = require('./db/config');
+    const result = await db.query(
+      'SELECT * FROM "User" WHERE user_id = $1',
+      [id]
+    );
+    
+    // Get the first user from the result
+    const user = result.rows[0];
+    
+    done(null, user);
+  } catch (error) {
+    console.error('Error deserializing user:', error);
+    done(error, null);
+  }
+});
+
+// Configure Passport
+passport.use(new GoogleStrategy({
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: "http://localhost:3001/api/auth/google/callback"
+  },
+  async function(accessToken, refreshToken, profile, cb) {
+    try {
+      console.log('Google profile received:', profile);
+      const db = require('./db/config');
+      
+      // Check if user exists
+      let user = await db.query(
+        'SELECT * FROM "User" WHERE email = $1',
+        [profile.emails[0].value]
+      );
+
+      if (user.rows.length === 0) {
+        console.log('Creating new user for:', profile.emails[0].value);
+        // Create new user if doesn't exist
+        user = await db.query(
+          'INSERT INTO "User" (username, email) VALUES ($1, $2) RETURNING *',
+          [profile.displayName, profile.emails[0].value]
+        );
+      }
+
+      console.log('User found/created:', user.rows[0]);
+      return cb(null, user.rows[0]);
+    } catch (error) {
+      console.error('Error in Google Strategy:', error);
+      return cb(error, null);
+    }
+  }
+));
 
 async function waitForPythonService(maxAttempts = 10) {
     for (let i = 0; i < maxAttempts; i++) {
@@ -613,11 +699,105 @@ app.get('/api/soundscapes/:id/download', async (req, res) => {
       console.error('Download error:', error);
       res.status(500).json({ success: false, message: 'Error generating soundscape: ' + error.message });
     }
-  });
+});
 
-app.listen(port, async () => {
-    console.log(`Node API is available on http://localhost:${port}`);
-    await waitForPythonService();
+// Google Auth routes with better error handling
+app.get('/api/auth/google',
+  (req, res, next) => {
+    console.log('Starting Google OAuth flow');
+    next();
+  },
+  passport.authenticate('google', { 
+    scope: ['profile', 'email'],
+    failureRedirect: 'http://localhost:3000/login?error=auth_failed'
+  })
+);
+
+app.get('/api/auth/google/callback', 
+  (req, res, next) => {
+    console.log('Received Google OAuth callback');
+    next();
+  },
+  passport.authenticate('google', { 
+    failureRedirect: 'http://localhost:3000/login?error=auth_failed' 
+  }),
+  (req, res) => {
+    try {
+      console.log('Google authentication successful');
+      const token = authService.generateToken(req.user);
+      
+      // Send token and user data to the client via postMessage
+      res.send(`
+        <html>
+          <body>
+            <script>
+              try {
+                window.opener.postMessage(
+                  { 
+                    token: "${token}", 
+                    user: ${JSON.stringify(req.user)}
+                  }, 
+                  "http://localhost:3000"
+                );
+                window.close();
+              } catch (error) {
+                console.error('Error in postMessage:', error);
+                window.location.href = 'http://localhost:3000/login?error=message_failed';
+              }
+            </script>
+          </body>
+        </html>
+      `);
+    } catch (error) {
+      console.error('Error in Google callback:', error);
+      res.redirect('http://localhost:3000/login?error=server_error');
+    }
+  }
+);
+
+// Add this route to check if user is authenticated
+app.get('/api/auth/status', (req, res) => {
+  if (req.isAuthenticated()) {
+    // User is authenticated, return user info (excluding sensitive data)
+    const user = { ...req.user };
+    
+    // Remove sensitive information
+    if (user.password) delete user.password;
+    
+    res.json({
+      isAuthenticated: true,
+      user: user
+    });
+  } else {
+    // User is not authenticated
+    res.json({
+      isAuthenticated: false,
+      user: null
+    });
+  }
+});
+
+// Add a logout route
+app.get('/api/auth/logout', (req, res) => {
+  req.logout(function(err) {
+    if (err) {
+      return res.status(500).json({ error: 'Error during logout' });
+    }
+    res.json({ success: true, message: 'Logged out successfully' });
+  });
+});
+
+// Middleware to check if user is authenticated
+const isAuthenticated = (req, res, next) => {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.status(401).json({ error: 'Unauthorized' });
+};
+
+// Example of a protected route
+app.get('/api/user/profile', isAuthenticated, (req, res) => {
+  res.json({ user: req.user });
 });
 
 // redis homepage
@@ -651,4 +831,22 @@ app.get('/api/homepage-sounds', async (req, res) => {
       return res.status(500).json({ success: false, message: 'Error fetching homepage sounds: ' + error.message });
     }
   });
+  
+// Add error handling middleware
+app.use((err, req, res, next) => {
+  console.error('Server error:', err);
+  res.status(500).json({ error: 'Internal server error' });
+});
+
+// Start the server
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+  console.log('Environment:', process.env.NODE_ENV || 'development');
+  console.log('CORS enabled for origins:', ['http://localhost:3000', 'http://localhost:3001']);
+}).on('error', (err) => {
+  console.error('Server failed to start:', err);
+  if (err.code === 'EADDRINUSE') {
+    console.error(`Port ${port} is already in use. Please choose a different port or close the application using it.`);
+  }
+});
   

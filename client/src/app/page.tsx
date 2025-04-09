@@ -7,12 +7,22 @@ import TrackCard from "../../components/TrackCards/TrackCard";
 import Category from "../../components/Category/Category";
 import About from "../../components/About/About";
 
+import { AuthProvider } from '../../components/AuthContext';
+
 import { KeywordResponse, SoundscapeDetails, SoundscapeResponse } from "./types/soundscape";
 import { getKeywords, downloadSound, createSoundscape, getSoundscapeById } from "./services/soundscapeService";
 import { useRouter } from "next/navigation"; // Correct for App Router
 
 export default function Home() {
-  // Inside Home function
+  return (
+    <AuthProvider>
+      <HomeContent />
+    </AuthProvider>
+  );
+}
+
+// Separate component for the main content
+function HomeContent() {
   const router = useRouter();
   const [user, setUser] = useState(false);
 

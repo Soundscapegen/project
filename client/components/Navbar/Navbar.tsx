@@ -25,15 +25,48 @@ import React, {
   const Navbar: React.FC<NavbarProps> = ({ user, setUser }) => {
     const [screen, setScreen] = useState<ScreenType>(null);
     const [dropdown, setDropdown] = useState<boolean>(false);
+    const [userEmail, setUserEmail] = useState<string | null>(null);
   
     // Use a ref to detect clicks outside of the dropdown
     const dropdownRef = useRef<HTMLDivElement>(null);
   
+    // Fetch user status when component mounts
+    useEffect(() => {
+      const fetchUserStatus = async () => {
+        try {
+          const response = await fetch('http://localhost:3001/api/auth/status', {
+            credentials: 'include'
+          });
+          const data = await response.json();
+          
+          if (data.isAuthenticated && data.user) {
+            setUserEmail(data.user.email);
+            setUser(true);
+          } else {
+            setUserEmail(null);
+            setUser(false);
+          }
+        } catch (error) {
+          console.error('Error fetching user status:', error);
+        }
+      };
+  
+      fetchUserStatus();
+    }, [setUser]);
+  
     const closeScreen = () => setScreen(null);
   
-    const handleLogout = () => {
-      setUser(false);
-      setDropdown(false);
+    const handleLogout = async () => {
+      try {
+        await fetch('http://localhost:3001/api/auth/logout', {
+          credentials: 'include'
+        });
+        setUser(false);
+        setUserEmail(null);
+        setDropdown(false);
+      } catch (error) {
+        console.error('Error logging out:', error);
+      }
     };
 
     const scrollToSection = (sectionId) => {
@@ -44,7 +77,7 @@ import React, {
     };
   
     useEffect(() => {
-      // Generic Event is enough since we’re attaching to document
+      // Generic Event is enough since we're attaching to document
       function handleClickOutside(event: Event) {
         // Type cast event.target so that .contains(...) is recognized
         if (
@@ -88,7 +121,7 @@ import React, {
               ref={dropdownRef}
               onClick={() => setDropdown(!dropdown)}
             >
-              <span className="username">Alex Sandara</span>
+              <span className="username">{userEmail || 'Email Not Found'}</span>
               {dropdown && (
                 <div className="dropdown-menu">
                   <p className="username">Profile</p>
