@@ -5,6 +5,8 @@ export interface Sound {
   sound_url: string;
   preview_url?: string;
   freesound_id?: string;
+  duration?: number;
+  license?: string;
 }
 
 export interface SoundscapeResponse {
@@ -25,10 +27,13 @@ export interface SoundscapeDetails {
     description: string;
   };
   sounds: Array<{
+    preview_url: string;
     sound_id: number;
     name: string;
     description: string;
     file_path: string;
+    volume?: number;
+    pan?: number;
   }>;
 }
 

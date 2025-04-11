@@ -139,3 +139,6 @@ server/public/sounds
 *.mp3
 *.ogg
 *.m4a
+
+# DS-Store
+.DS_Store

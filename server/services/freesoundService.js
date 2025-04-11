@@ -72,12 +72,12 @@ async function downloadAndSaveSound(freesoundId, sourceUrl, name, description, p
   }
 
   // We try preview URL if full download failed
-  if (!downloaded) {
+  if (!downloaded && previewUrl) { 
     if (previewUrl) {
       console.log(`Full sound download failed. Using preview URL instead: ${previewUrl}`);
       downloadUrl = previewUrl;
       try {
-        await downloadFile(downloadUrl, filePath);
+        await downloadFile(previewUrl, filePath); 
         console.log(`Preview download successful`);
         downloaded = true;
       } catch (error) {
@@ -96,9 +96,21 @@ async function downloadAndSaveSound(freesoundId, sourceUrl, name, description, p
         return reject(err);
       }
       try {
+        // Check if a record with this source_url or file_path already exists
+        const existingResult = await db.query(
+          'SELECT * FROM "Sound" WHERE source_url = $1 OR file_path = $2',
+          [sourceUrl, `/sounds/${filename}`]
+        );
+        
+        if (existingResult.rows.length > 0) {
+          console.log(`Sound already exists in database with ID ${existingResult.rows[0].sound_id}`);
+          return resolve(existingResult.rows[0]);
+        }
+        
+        // If not exists, insert new record
         const result = await db.query(
-          'INSERT INTO "Sound" (source_url, freesound_id, file_path, name, description) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-          [sourceUrl, freesoundId, `/sounds/${filename}`, name, description]
+          'INSERT INTO "Sound" (source_url, freesound_id, file_path, name, description, preview_url) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+          [sourceUrl, freesoundId, `/sounds/${filename}`, name, description, previewUrl]
         );
         console.log(`Sound saved to database with ID ${result.rows[0].sound_id}`);
         resolve(result.rows[0]);
@@ -142,14 +154,84 @@ async function getSoundDetails(freesoundId) {
   });
 }
 
-// Look up a sound in the db by freesoundId
-async function getSoundByFreesoundId(freesoundId) {
+// Search for sounds using the Freesound API
+async function searchFreesound(query, maxResults = 1, options = {}) {
+  return new Promise((resolve, reject) => {
+    // Build the URL with query parameters
+    const params = new URLSearchParams({
+      query: query,
+      fields: "id,name,description,download,previews,duration,license",
+      sort: options.sort || "score",
+      filter: options.filter || "",
+      page_size: maxResults.toString(),
+      token: FREESOUND_API_KEY
+    });
+    
+    const url = `https://freesound.org/apiv2/search/text/?${params.toString()}`;
+    
+    https.get(url, (response) => {
+      let data = '';
+      response.on('data', (chunk) => {
+        data += chunk;
+      });
+      
+      response.on('end', () => {
+        try {
+          const result = JSON.parse(data);
+          
+          if (!result.results || result.results.length === 0) {
+            resolve({ results: [] });
+            return;
+          }
+          
+          // Process the results similar to Python code
+          const processedResults = result.results.map(sound => {
+            // Add token to download URL
+            if (sound.download) {
+              sound.download = `${sound.download}?token=${FREESOUND_API_KEY}`;
+            }
+            
+            // Extract preview URL
+            if (sound.previews && sound.previews['preview-hq-mp3']) {
+              sound.preview_url = sound.previews['preview-hq-mp3'];
+            }
+            
+            return sound;
+          });
+          
+          resolve({ results: processedResults });
+        } catch (error) {
+          reject(error);
+        }
+      });
+    }).on('error', (err) => {
+      reject(err);
+    });
+  });
+}
+
+// Look up a sound in the db by freesoundId and sourceUrl
+async function getSoundByFreesoundId(freesoundId, sourceUrl) {
   try {
-    const result = await db.query(
-      'SELECT * FROM "Sound" WHERE freesound_id = $1',
-      [freesoundId]
-    );
-    return result.rows.length > 0 ? result.rows[0] : null;
+    // Always check by sourceUrl since most freesoundIds are 0
+    if (sourceUrl) {
+      const result = await db.query(
+        'SELECT * FROM "Sound" WHERE source_url = $1',
+        [sourceUrl]
+      );
+      return result.rows.length > 0 ? result.rows[0] : null;
+    }
+    
+    // Fallback to checking by freesoundId if sourceUrl not provided
+    if (freesoundId && freesoundId !== '0') {
+      const result = await db.query(
+        'SELECT * FROM "Sound" WHERE freesound_id = $1',
+        [freesoundId]
+      );
+      return result.rows.length > 0 ? result.rows[0] : null;
+    }
+    
+    return null;
   } catch (error) {
     console.error('Error checking if sound exists:', error);
     throw error;
@@ -159,5 +241,6 @@ async function getSoundByFreesoundId(freesoundId) {
 module.exports = {
   downloadAndSaveSound,
   getSoundDetails,
-  getSoundByFreesoundId
+  getSoundByFreesoundId,
+  searchFreesound
 };

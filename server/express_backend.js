@@ -6,6 +6,11 @@ const app = express()
 const port = 3001;
 const redisClient = require('./db/redis');
 const freesoundService = require('./services/freesoundService');
+const { cacheFetch } = require('./db/cache');
+
+//changed ** for combined audio download
+const ffmpeg = require('fluent-ffmpeg');
+const path = require('path');
 
 app.use(express.json())
 app.use(cors())
@@ -38,7 +43,10 @@ app.post('/api/keywords', async (req, res) => {
     try {
         if (!redisClient.isReady) {
             console.error("Redis client not ready");
-            throw new Error("Redis client not ready");
+            return res.status(500).json({
+                success: false,
+                message: "Internal server error: Cache service unavailable. Please try again later."
+            });
         }
 
         console.log("Checking Redis cache for:", `keywords:${str}`);
@@ -63,49 +71,181 @@ app.post('/api/keywords', async (req, res) => {
                 break; // If successful, stop retry loop
             } catch (error) {
                 retries--;
-                if (retries === 0) throw error;
+                if (retries === 0) {
+                    console.error("Failed to reach Python service after multiple attempts:", error);
+                    return res.status(503).json({
+                        success: false, 
+                        message: "Service temporarily unavailable. Please try again later."
+                    });
+                }
                 console.log(`Retrying Python service request... ${retries} attempts remaining`);
                 await new Promise(resolve => setTimeout(resolve, 1000));
             }
         }
 
-        let keywords;
+        // Parse JSON response once
+        let jsonResponse;
+        try {
+            jsonResponse = await response.json();
+        } catch (error) {
+            console.error("Failed to parse Python service response:", error);
+            return res.status(500).json({
+                success: false,
+                message: "Error processing the soundscape request. Please try again."
+            });
+        }
+
         if (response.ok) {
-            keywords = await response.json()
-            if (!keywords.success) {
+            if (!jsonResponse.success) {
                 console.log("Error in python response, success=false");
-                return res.status(500).send({
-                    message: "Error from the Python server."
+                return res.status(400).json({
+                    success: false,
+                    message: jsonResponse.message || "Unable to process your soundscape request.",
+                    is_valid_input: jsonResponse.is_valid_input || false,
+                    suggestions: jsonResponse.suggestions || [
+                        "forest with birds and a stream",
+                        "busy cafe with people talking",
+                        "thunderstorm at night",
+                        "ocean waves on a beach",
+                        "spaceship engine room humming"
+                    ]
                 });
             }
 
-            // Cache result if success
-            console.log("got keywords:")
-            console.log(keywords)
-            
             // Check if preview URLs are present
-            if (keywords && keywords.success && keywords.sounds) {
+            if (jsonResponse && jsonResponse.success && jsonResponse.sounds) {
                 console.log("Checking preview URLs in sounds:");
-                keywords.sounds.forEach((sound, index) => {
+                jsonResponse.sounds.forEach((sound, index) => {
                     console.log(`Sound ${index} preview_url:`, sound.preview_url);
                 });
             }
 
-            if (keywords && keywords.success) {
-                await redisClient.set(`keywords:${str}`, JSON.stringify(keywords));
+            // Cache result if success
+            console.log("got keywords:");
+            console.log(jsonResponse);
+            
+            if (jsonResponse && jsonResponse.success) {
+                await redisClient.set(`keywords:${str}`, JSON.stringify(jsonResponse));
             }
             
-            return res.status(201).json(keywords);
+            return res.status(200).json(jsonResponse);
         } else {
             // Non-OK response
             console.log("Python service returned non-OK response:", response.status);
-            return res.status(response.status).send({
-                message: "Error processing request"
+            
+            // Use the error message from the Python service if available
+            return res.status(400).json({
+                success: false,
+                message: jsonResponse?.message || "Failed to process your soundscape request.",
+                suggestions: [
+                    "forest with birds and a stream",
+                    "busy cafe with people talking",
+                    "thunderstorm at night",
+                    "ocean waves on a beach",
+                    "spaceship engine room humming"
+                ]
             });
         }
     } catch (error) {
         console.log("Error: ", error);
-        return res.status(500).send({message: "Error with the server, unable to process input"});
+        return res.status(500).json({
+            success: false, 
+            message: "Server error processing the soundscape request. Please try again later.",
+            suggestions: [
+                "forest with birds and a stream",
+                "busy cafe with people talking",
+                "thunderstorm at night",
+                "ocean waves on a beach",
+                "spaceship engine room humming"
+            ]
+        });
+    }
+});
+
+// Add track names endpoint
+app.post('/api/track-names', async (req, res) => {
+    console.log("Receiving POST request to /track-names endpoint");
+    const { sounds } = req.body;
+    console.log(`Request to generate names for ${sounds.length} sounds`);
+
+    try {
+        if (!redisClient.isReady) {
+            console.error("Redis client not ready");
+            return res.status(500).json({
+                success: false,
+                message: "Internal server error: Cache service unavailable. Please try again later."
+            });
+        }
+        
+        // Create a cache key based on sound names and descriptions
+        const cacheKey = `track-names:${sounds.map(s => `${s.name}-${s.description?.substring(0, 50)}`).join('|')}`;
+        console.log("Checking Redis cache for:", cacheKey);
+        const cachedResult = await redisClient.get(cacheKey);
+        
+        if (cachedResult) {
+            console.log("Cache HIT - Returning cached track names");
+            return res.status(200).json(JSON.parse(cachedResult));
+        }
+        console.log("Cache MISS - Fetching from Python service");
+
+        // Attempt up to 3 times
+        let retries = 3;
+        let response;
+        while (retries > 0) {
+            try {
+                response = await fetch("http://soundscape-python:3002/api/track-names", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ sounds })
+                });
+                break; // If successful, stop retry loop
+            } catch (error) {
+                retries--;
+                if (retries === 0) {
+                    console.error("Failed to reach Python service after multiple attempts:", error);
+                    return res.status(503).json({
+                        success: false, 
+                        message: "Service temporarily unavailable. Please try again later."
+                    });
+                }
+                console.log(`Retrying Python service request... ${retries} attempts remaining`);
+                await new Promise(resolve => setTimeout(resolve, 1000));
+            }
+        }
+
+        // Parse JSON response once
+        let jsonResponse;
+        try {
+            jsonResponse = await response.json();
+        } catch (error) {
+            console.error("Failed to parse Python service response:", error);
+            return res.status(500).json({
+                success: false,
+                message: "Error processing the track names request. Please try again."
+            });
+        }
+
+        if (response.ok) {
+            // Cache successful result
+            if (jsonResponse && jsonResponse.success) {
+                console.log("Got track names:", jsonResponse);
+                await redisClient.set(cacheKey, JSON.stringify(jsonResponse));
+            }
+            
+            return res.status(200).json(jsonResponse);
+        } else {
+            console.error("Python service returned error:", jsonResponse);
+            return res.status(response.status || 500).json({
+                success: false,
+                message: jsonResponse.message || "Failed to generate track names."
+            });
+        }
+    } catch (error) {
+        console.error("Error handling track names request:", error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error. Please try again later."
+        });
     }
 });
 
@@ -114,20 +254,60 @@ app.post('/api/sounds/download', async (req, res) => {
     console.log("Received download request with body:", req.body);
     const { freesoundId, sourceUrl, name, description, previewUrl } = req.body;
     
-    if (!freesoundId || !sourceUrl) {
-        console.error("Missing required parameters:", { freesoundId, sourceUrl });
+    if (!sourceUrl) {
+        console.error("Missing required parameters:", { sourceUrl });
         return res.status(400).json({ 
             success: false, 
-            message: 'Missing required parameters: freesoundId and sourceUrl are required' 
+            message: 'Missing required parameter: sourceUrl is required' 
         });
     }
     
     try {
         // Check if the sound already exists in the database
-        const existingSound = await freesoundService.getSoundByFreesoundId(freesoundId);
+        const existingSound = await freesoundService.getSoundByFreesoundId(freesoundId, sourceUrl);
         
         if (existingSound) {
             console.log("Sound already exists in database:", existingSound);
+            
+            // Update the name and preview_url if provided and different from existing
+            if ((name && name !== existingSound.name) || 
+                (previewUrl && previewUrl !== existingSound.preview_url)) {
+                
+                const db = require('./db/config');
+                const updateFields = [];
+                const updateValues = [];
+                let valueIndex = 1;
+                
+                if (name && name !== existingSound.name) {
+                    updateFields.push(`name = $${valueIndex}`);
+                    updateValues.push(name);
+                    valueIndex++;
+                }
+                
+                if (previewUrl && previewUrl !== existingSound.preview_url) {
+                    updateFields.push(`preview_url = $${valueIndex}`);
+                    updateValues.push(previewUrl);
+                    valueIndex++;
+                }
+                
+                if (updateFields.length > 0) {
+                    updateValues.push(existingSound.sound_id);
+                    const updateQuery = `UPDATE "Sound" SET ${updateFields.join(', ')}, updated_at = NOW() WHERE sound_id = $${valueIndex} RETURNING *`;
+                    
+                    console.log(`Updating sound ${existingSound.sound_id} with new name/preview URL`);
+                    const result = await db.query(updateQuery, updateValues);
+                    
+                    if (result.rows.length > 0) {
+                        console.log("Sound updated successfully:", result.rows[0]);
+                        return res.status(200).json({
+                            success: true,
+                            message: 'Sound exists and was updated with new information',
+                            sound: result.rows[0]
+                        });
+                    }
+                }
+            }
+            
             return res.status(200).json({ 
                 success: true, 
                 message: 'Sound already exists in the database',
@@ -155,6 +335,63 @@ app.post('/api/sounds/download', async (req, res) => {
         return res.status(500).json({ 
             success: false, 
             message: 'Error downloading sound: ' + error.message 
+        });
+    }
+});
+
+// Search for a single sound using a query
+app.post('/api/sounds/search', async (req, res) => {
+    const { query, filter } = req.body;
+    
+    if (!query) {
+        return res.status(400).json({
+            success: false,
+            message: 'Query is required'
+        });
+    }
+    
+    try {
+        // Use the freesoundService to search directly with advanced options
+        const searchOptions = {
+            // Default to prioritizing shorter sounds (under 60 seconds)
+            filter: filter || "duration:[0 TO 60]",
+            // Sort by relevance (score)
+            sort: "score"
+        };
+        
+        const freesoundResult = await freesoundService.searchFreesound(query, 1, searchOptions);
+        
+        if (!freesoundResult.results || freesoundResult.results.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'No sound found for the given query'
+            });
+        }
+        
+        // Get the first result
+        const sound = freesoundResult.results[0];
+        
+        // Format the response to match what our front-end expects
+        const soundResponse = {
+            sound_number: "Sound 1",
+            name: sound.name || "Unnamed Sound",
+            description: sound.description || "No description available",
+            sound_url: sound.download || "",
+            preview_url: sound.preview_url || "",
+            freesound_id: sound.id,
+            duration: sound.duration || 0,
+            license: sound.license || ""
+        };
+        
+        return res.status(200).json({
+            success: true,
+            sound: soundResponse
+        });
+    } catch (error) {
+        console.error('Error searching for sound:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Error searching for sound: ' + error.message
         });
     }
 });
@@ -194,19 +431,47 @@ app.post('/api/soundscapes', async (req, res) => {
     try {
         await db.query('BEGIN');
         
-        const soundscapeResult = await db.query( // insert soundscape into db
-            'INSERT INTO "Soundscape" (name, description, user_id) VALUES ($1, $2, $3) RETURNING *',
-            [name, description || '', user_id || null]
+        // Check if the soundscape exists
+        let soundscape;
+        const existingResult = await db.query(
+            'SELECT * FROM "Soundscape" WHERE name = $1 AND description = $2',
+            [name, description || '']
         );
         
-        const soundscape = soundscapeResult.rows[0]; // get the soundscape id
+        if (existingResult.rows.length > 0) {
+            // Soundscape exists, use it
+            soundscape = existingResult.rows[0];
+            
+            // Delete any existing sound associations for this soundscape
+            await db.query(
+                'DELETE FROM "SoundscapeSound" WHERE soundscape_id = $1',
+                [soundscape.soundscape_id]
+            );
+        } else {
+            // Create a new soundscape
+            const soundscapeResult = await db.query(
+                'INSERT INTO "Soundscape" (name, description, user_id) VALUES ($1, $2, $3) RETURNING *',
+                [name, description || '', user_id || null]
+            );
+            soundscape = soundscapeResult.rows[0];
+        }
         
-        for (const soundItem of sound_ids) { // insert each sound into the soundscape
+        // Filter out duplicate sound_ids
+        const uniqueSounds = {};
+        for (const soundItem of sound_ids) {
             const { sound_id, volume = 1.0, pan = 0.0 } = soundItem;
+            if (!uniqueSounds[sound_id]) {
+                uniqueSounds[sound_id] = { sound_id, volume, pan };
+            }
+        }
+        
+        // Insert each unique sound into the soundscape
+        for (const soundId in uniqueSounds) {
+            const { sound_id, volume, pan } = uniqueSounds[soundId];
             
             await db.query(
                 'INSERT INTO "SoundscapeSound" (soundscape_id, sound_id, volume, pan) VALUES ($1, $2, $3, $4)',
-                [soundscape.soundscape_id, sound_id, volume, pan]
+                [soundscape.soundscape_id, sound_id, Math.round(volume), pan]
             );
         }
         
@@ -214,15 +479,17 @@ app.post('/api/soundscapes', async (req, res) => {
         
         return res.status(201).json({
             success: true,
-            message: 'Soundscape created successfully',
-            soundscape
+            message: existingResult?.rows.length > 0 ? 'Soundscape updated successfully' : 'Soundscape created successfully',
+            soundscape,
+            isUpdate: existingResult?.rows.length > 0
         });
     } catch (error) {
         await db.query('ROLLBACK');
         console.error('Error creating soundscape:', error);
         return res.status(500).json({
             success: false,
-            message: 'Error creating soundscape: ' + error.message
+            message: 'Error with soundscape: ' + error.message,
+            error_code: error.code
         });
     }
 });
@@ -230,6 +497,7 @@ app.post('/api/soundscapes', async (req, res) => {
 // Get a soundscape by ID with its associated sounds
 app.get('/api/soundscapes/:id', async (req, res) => {
     const soundscapeId = req.params.id;
+    const redisKey = `soundscape:${soundscapeId}`;
     
     if (!soundscapeId) {
         return res.status(400).json({
@@ -241,33 +509,36 @@ app.get('/api/soundscapes/:id', async (req, res) => {
     const db = require('./db/config');
     
     try {
-        const soundscapeResult = await db.query( // retrieve soundscape from db
-            'SELECT * FROM "Soundscape" WHERE soundscape_id = $1',
-            [soundscapeId]
-        );
+        const result = await cacheFetch(redisKey, async () => {
+            
+            const soundscapeResult = await db.query( // retrieve soundscape from db
+                'SELECT * FROM "Soundscape" WHERE soundscape_id = $1',
+                [soundscapeId]
+            );
+            
+            if (soundscapeResult.rows.length === 0) { // if soundscape not found
+                throw new Error ('Soundscape not found')
+            }
+            
+            const soundscape = soundscapeResult.rows[0];
+            
+            const soundsResult = await db.query( // retrieve each sound in the soundscape
+                `SELECT s.*, ss.volume, ss.pan 
+                FROM "Sound" s
+                JOIN "SoundscapeSound" ss ON s.sound_id = ss.sound_id
+                WHERE ss.soundscape_id = $1`,
+                [soundscapeId]
+            );
         
-        if (soundscapeResult.rows.length === 0) { // if soundscape not found
-            return res.status(404).json({
-                success: false,
-                message: 'Soundscape not found'
-            });
-        }
-        
-        const soundscape = soundscapeResult.rows[0];
-        
-        const soundsResult = await db.query( // retrieve each sound in the soundscape
-            `SELECT s.*, ss.volume, ss.pan 
-             FROM "Sound" s
-             JOIN "SoundscapeSound" ss ON s.sound_id = ss.sound_id
-             WHERE ss.soundscape_id = $1`,
-            [soundscapeId]
-        );
-        
-        return res.status(200).json({
-            success: true,
-            soundscape,
-            sounds: soundsResult.rows
+            return {
+                success: true,
+                soundscape,
+                sounds: soundsResult.rows
+            };
         });
+
+        res.status(200).json(result);
+
     } catch (error) {
         console.error('Error getting soundscape:', error);
         return res.status(500).json({
@@ -277,7 +548,277 @@ app.get('/api/soundscapes/:id', async (req, res) => {
     }
 });
 
+// Add a sound to an existing soundscape
+app.post('/api/soundscapes/:id/sounds', async (req, res) => {
+    const soundscapeId = req.params.id;
+    const { sound } = req.body;
+    
+    if (!sound || !sound.sound_id) {
+        return res.status(400).json({
+            success: false,
+            message: 'Sound ID is required'
+        });
+    }
+    
+    const db = require('./db/config');
+    
+    try {
+        await db.query('BEGIN');
+        
+        // Check if the soundscape exists
+        const soundscapeResult = await db.query(
+            'SELECT * FROM "Soundscape" WHERE soundscape_id = $1',
+            [soundscapeId]
+        );
+        
+        if (soundscapeResult.rows.length === 0) {
+            await db.query('ROLLBACK');
+            return res.status(404).json({
+                success: false,
+                message: 'Soundscape not found'
+            });
+        }
+        
+        // Count how many sounds the soundscape currently has
+        const countResult = await db.query(
+            'SELECT COUNT(*) FROM "SoundscapeSound" WHERE soundscape_id = $1',
+            [soundscapeId]
+        );
+        
+        const soundCount = parseInt(countResult.rows[0].count);
+        
+        if (soundCount >= 6) {
+            await db.query('ROLLBACK');
+            return res.status(400).json({
+                success: false,
+                message: 'Soundscape already has the maximum of 6 sounds'
+            });
+        }
+        
+        // Check if the sound exists
+        const soundResult = await db.query(
+            'SELECT * FROM "Sound" WHERE sound_id = $1',
+            [sound.sound_id]
+        );
+        
+        if (soundResult.rows.length === 0) {
+            await db.query('ROLLBACK');
+            return res.status(404).json({
+                success: false,
+                message: 'Sound not found'
+            });
+        }
+        
+        // Check if the sound is already in the soundscape
+        const existingResult = await db.query(
+            'SELECT * FROM "SoundscapeSound" WHERE soundscape_id = $1 AND sound_id = $2',
+            [soundscapeId, sound.sound_id]
+        );
+        
+        if (existingResult.rows.length > 0) {
+            // Update the existing relationship with new volume and pan
+            await db.query(
+                'UPDATE "SoundscapeSound" SET volume = $1, pan = $2 WHERE soundscape_id = $3 AND sound_id = $4',
+                [Math.round(sound.volume || 1.0), sound.pan || 0.0, soundscapeId, sound.sound_id]
+            );
+        } else {
+            // Add the new sound to the soundscape
+            await db.query(
+                'INSERT INTO "SoundscapeSound" (soundscape_id, sound_id, volume, pan) VALUES ($1, $2, $3, $4)',
+                [soundscapeId, sound.sound_id, Math.round(sound.volume || 1.0), sound.pan || 0.0]
+            );
+        }
+        
+        await db.query('COMMIT');
+        
+        // Get the updated soundscape details
+        const soundscapeData = await db.query(
+            'SELECT * FROM "Soundscape" WHERE soundscape_id = $1',
+            [soundscapeId]
+        );
+        
+        const soundsData = await db.query(
+            `SELECT s.*, ss.volume, ss.pan 
+            FROM "Sound" s
+            JOIN "SoundscapeSound" ss ON s.sound_id = ss.sound_id
+            WHERE ss.soundscape_id = $1`,
+            [soundscapeId]
+        );
+        
+        return res.status(200).json({
+            success: true,
+            message: 'Sound added to soundscape successfully',
+            soundscape: soundscapeData.rows[0],
+            sounds: soundsData.rows
+        });
+    } catch (error) {
+        await db.query('ROLLBACK');
+        console.error('Error adding sound to soundscape:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Error adding sound to soundscape: ' + error.message
+        });
+    }
+});
+
+// To download tracks and finalized as one mp3
+app.get('/api/soundscapes/:id/download', async (req, res) => {
+
+    const soundscapeId = req.params.id;
+    // check if hit
+    console.log(`Download route; Hit with soundscape ID: ${soundscapeId}`)
+
+    if (!soundscapeId) {
+      return res.status(400).json({ success: false, message: 'Soundscape ID is required' });
+    }
+  
+    const db = require('./db/config');
+  
+    try {
+      const soundsResult = await db.query(
+        `SELECT s.file_path, s.name, ss.volume, ss.pan
+         FROM "Sound" s
+         JOIN "SoundscapeSound" ss ON s.sound_id = ss.sound_id
+         WHERE ss.soundscape_id = $1`,
+        [soundscapeId]
+      );
+  
+      const rows = soundsResult.rows;
+      if (rows.length === 0) {
+        return res.status(404).json({ success: false, message: "No sounds found for this soundscape." });
+      }
+      
+      console.warn("No sounds found for this soundscape, skipping FFmpeg.");
+
+      const files = rows.map(r => {
+        // Using preview_url (since it's a local copy), fallback to file_path
+        const relativePath = (r.preview_url || r.file_path || '').replace(/^\/?/, '');
+        return path.join(__dirname, 'public', relativePath);
+      })
+
+      //  Filter out any missing files, e.g those deleted
+      const existingRows = rows.filter((_, i) => fs.existsSync(files[i]));
+      const existingFiles = files.filter(fs.existsSync);
+
+      if (existingFiles.length === 0) {
+        return res.status(404).json({ success: false, message: "No valid sounds found for merging" });
+      }
+
+      // check logs for any missing files
+      console.log("Files fetched from DB:", files);
+
+      existingFiles.forEach((filePath, idx) => {
+        const exists = fs.existsSync(filePath);
+        console.log(`File ${idx + 1}: ${filePath} -- ${exists ? 'File exists' : 'File is missing'}`);
+        });
+
+      // temp path for dowload
+      const outputPath = `/tmp/soundscape_${soundscapeId}.mp3`;
+      
+      console.log("Final output path:", JSON.stringify(outputPath));
+
+      const command = ffmpeg();
+  
+      const TARGET_DURATION = 90; // seconds
+      existingFiles.forEach(file => {
+        command.input(file)
+          .inputOptions([
+            `-stream_loop -1`,          // loop infinitely
+            `-t ${TARGET_DURATION}`     // but clip total to 90 seconds
+        ]);
+      });
+
+      // Generate per track filter chains for volume + pan
+      const volumePanFilters = existingRows.map((row, i) => {
+        const input = `[${i}:a]`;
+ 
+        // Clamp dB between -30 (soft) and 0 (loud)
+        const clampedDb = Math.max(-30, Math.min(0, row.volume ?? 0));
+        const linearVolume = Math.pow(10, clampedDb / 20).toFixed(4);
+
+        const pan = Math.max(-1.0, Math.min(1.0, row.pan ?? 0.0)); // Clamp pan to between -1 and 1
+
+        const left = ((1 - pan) / 2).toFixed(2);
+        const right = ((1 + pan) / 2).toFixed(2);
+        
+        console.log(`Track ${i} "${row.name}" volume: ${row.volume} dB → linear ${linearVolume}`); // check tracks
+
+        return `${input}volume=${linearVolume},pan=stereo|c0=${left}*FL|c1=${right}*FR[out${i}]`;
+      });
+
+      // Combine all filtered outputs using amix
+      const amixInputs = existingRows.map((_, i) => `[out${i}]`).join('');
+      const fullFilter = [
+        ...volumePanFilters,
+        `${amixInputs}amix=inputs=${rows.length}:duration=longest[amixout]`, 
+        `[amixout]volume=3.0[out]` // boost entire mix vol
+      ];
+
+      // Apply filter + save to temporary output path
+      command
+       .complexFilter(fullFilter, 'out')
+       .audioCodec('libmp3lame')
+       .output(outputPath)    
+       .on('start', cmd => {
+           console.log("FFmpeg command:", cmd);
+        })
+       .on('error', err => {
+            console.error('FFmpeg error:', err.message);
+            if (!res.headersSent) {
+              return res.status(500).json({ success: false, message: "Error mixing audio." });
+            }
+        })
+       .on('end', () => {
+           console.log('Merge finished');
+           res.download(outputPath, `soundscape_${soundscapeId}.mp3`, err => {
+             if (err) console.error('Send error:', err);
+             fs.unlink(outputPath, () => {});
+           });
+        })
+
+      console.log("Running FFmpeg");
+      command.run();
+
+    } catch (error) {
+      console.error('Download error:', error);
+      res.status(500).json({ success: false, message: 'Error generating soundscape: ' + error.message });
+    }
+  });
+
 app.listen(port, async () => {
     console.log(`Node API is available on http://localhost:${port}`);
     await waitForPythonService();
 });
+
+// redis homepage
+
+app.get('/api/homepage-sounds', async (req, res) => {
+    const cacheKey = 'homepage:sounds';
+    try {
+      // Check if the sounds are cached in Redis
+      if (redisClient.isReady) {
+        const cachedSounds = await redisClient.get(cacheKey);
+        if (cachedSounds) {
+          console.log('Cache hit for homepage sounds');
+          return res.status(200).json({ success: true, sounds: JSON.parse(cachedSounds) });
+        }
+      } else {
+        console.warn('Redis client not ready, skipping cache check');
+      }
+  
+      // If not cached, query the database.
+      const db = require('./db/config');
+      const result = await db.query('SELECT * FROM "Sound" LIMIT 3');
+      
+      // Cache the result in Redis for one hour (3600 seconds)
+      if (redisClient.isReady) {
+        await redisClient.set(cacheKey, JSON.stringify(result.rows), { EX: 3600 });
+      }
+      
+      return res.status(200).json({ success: true, sounds: result.rows });
+    } catch (error) {
+      console.error('Error fetching homepage sounds:', error);
+      return res.status(500).json({ success: false, message: 'Error fetching homepage sounds: ' + error.message });
+    }
+  });
+  

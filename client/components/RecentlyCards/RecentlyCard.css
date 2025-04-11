@@ -1,0 +1,72 @@
+.sound-card {
+    font-family: Poppins;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 440px;
+    height: 185px;
+    overflow: hidden;
+    gap: 10px;
+    flex-shrink: 0;
+    box-shadow: -4px -3px 5px 0px rgba(0, 0, 0, 0.25);
+}
+
+.sound-card img {
+    width: 128px;
+    height: 185px;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.info-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+.date {
+    color: #868686;
+    font-size: 11px;
+    font-style: italic;
+    font-weight: 300;
+}
+
+h3 {
+    color: #000;
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 8px;
+}
+
+.sound-info {
+    margin-bottom: 10px;
+}
+
+.sound-info p {
+    color: #868686;
+    font-size: 11px;
+    font-weight: 400;
+}
+
+
+.audio-control {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1px;
+}
+
+.duration {
+    color: #000;
+    font-size: 10px;
+    font-weight: 400;
+}
+
+.sound-card:hover {
+    transition: all 0.3s ease 0s;
+    background-color: rgba(202, 202, 202, 0.30);
+    box-shadow: -7px 7px 4.6px 0px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+}
