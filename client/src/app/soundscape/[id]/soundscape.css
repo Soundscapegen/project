@@ -1,0 +1,270 @@
+.soundscape-page {
+    font-family: 'Inria Sans', sans-serif; /* Apply consistent font */
+    color: #1E1E1E; /* Default text color */
+  }
+  
+  .soundscape-container {
+    max-width: 1200px; /* Limit content width */
+    margin: 2rem auto; /* Center container with top/bottom margin */
+    padding: 0 1.5rem; /* Padding on left/right */
+  }
+  
+  /* Centered container for loading state */
+  .loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px; /* Ensure it takes up some space */
+  }
+  
+  /* Spinner animation styles */
+  .spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid rgba(244, 103, 31, 0.2); /* Light background circle */
+    border-radius: 50%;
+    border-top-color: #F4671F; /* Colored top part for spinning effect */
+    animation: spin 1s ease-in-out infinite; /* Apply the spin animation */
+    margin-bottom: 1rem;
+  }
+  
+  /* Keyframes for the spinner rotation */
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  /* Shared styles for error and not-found states */
+  .error-container, .not-found {
+    text-align: center;
+    padding: 3rem 1rem;
+    background-color: #f8f8f8; /* Light background */
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  }
+  
+  .error-container h2, .not-found h2 {
+    color: #F14A21; /* Theme color for headings */
+    margin-bottom: 1rem;
+  }
+  
+  /* Button style for navigating back */
+  .back-button {
+    display: inline-block;
+    margin-top: 1.5rem;
+    padding: 0.75rem 1.5rem;
+    background: linear-gradient(180deg, #F14A21 0%, #F4671F 75%, #F7861C 100%); /* Theme gradient */
+    color: white;
+    border-radius: 24px; /* Pill shape */
+    text-decoration: none; /* Remove underline */
+    font-weight: bold;
+    transition: transform 0.2s ease; /* Smooth hover transition */
+  }
+  
+  .back-button:hover {
+    transform: translateY(-2px); /* Slight lift on hover */
+  }
+  
+  /* Soundscape title */
+  .soundscape-details h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #F14A21; /* Theme color */
+  }
+  
+  .description {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    line-height: 1.6; /* Improve readability */
+  }
+  
+  /* Container for action buttons (Edit, Share, Download) */
+  .actions {
+    display: flex;
+    gap: 1rem; /* Space between buttons */
+    margin-bottom: 2rem;
+  }
+  
+  /* Base styles for action buttons */
+  .download-button, .edit-button, .share-button {
+    padding: 0.75rem 1.5rem;
+    border-radius: 24px; /* Pill shape */
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease; /* Smooth transition for hover */
+  }
+  
+  /* Edit button specific styles (link) */
+  .edit-button {
+    background: linear-gradient(180deg, #F14A21 0%, #F4671F 75%, #F7861C 100%); /* Theme gradient */
+    color: white;
+    text-decoration: none; /* Remove underline if it's an <a> tag */
+  }
+  
+  /* Download button specific styles */
+  .download-button {
+    background: linear-gradient(180deg, #1F80F7 0%, #1F68F7 75%, #1F50F7 100%); /* Different gradient (Blue) */
+    color: white;
+    border: none;
+  }
+
+  /* Hover effect for download button */
+  .download-button:hover {
+    transform: translateY(-2px); /* Lift effect */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  }
+
+  /* Style for download button when download is in progress */
+  .download-button.downloading {
+    background: #888; /* Grey background */
+    cursor: not-allowed; /* Indicate non-interactive state */
+    opacity: 0.8; /* Slightly faded */
+    pointer-events: none; /* Disable clicks */
+  }
+
+  /* Share button specific styles */
+  .share-button {
+    background: white;
+    color: #F4671F; /* Theme color text */
+    border: 2px solid #F4671F; /* Theme color border */
+  }
+  
+  /* Shared hover effect for Edit and Share buttons */
+  .edit-button:hover, .share-button:hover {
+    transform: translateY(-2px); /* Lift effect */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  }
+  
+  /* Container for the list of sounds */
+  .sounds-container {
+    margin-top: 2rem;
+  }
+  
+  .sounds-container h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    position: relative; /* Needed for the ::after pseudo-element */
+  }
+  
+  /* Decorative underline using a pseudo-element */
+  .sounds-container h2:after {
+    content: ''; /* Required for pseudo-elements */
+    position: absolute;
+    bottom: -10px; /* Position below the text */
+    left: 0;
+    width: 50px;
+    height: 3px;
+    background: linear-gradient(90deg, #F14A21 0%, #F7861C 100%); /* Theme gradient */
+  }
+  
+  /* Grid layout for the sound items */
+  .sounds-list {
+    list-style: none; /* Remove default bullet points */
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Responsive grid columns */
+    gap: 1.5rem; /* Space between grid items */
+  }
+  
+  /* Styling for individual sound item cards */
+  .sound-item {
+    background-color: #f8f8f8; /* Light background */
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    transition: transform 0.2s ease; /* Smooth hover transition */
+  }
+  
+  .sound-item:hover {
+    transform: translateY(-5px); /* Lift effect on hover */
+  }
+  
+  /* Sound item title */
+  .sound-info h3 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    color: #F4671F; /* Theme color */
+  }
+  
+  .sound-info p {
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    color: #666; /* Grey text for description */
+  }
+  
+  /* Container for the audio player */
+  .sound-player {
+    margin-top: 1rem;
+  }
+  
+  .sound-player audio {
+    width: 100%; /* Make player fill container width */
+    height: 40px; /* Standard audio player height */
+  }
+  
+  /* Responsive adjustments for smaller screens */
+  @media (max-width: 768px) {
+    .sounds-list {
+      grid-template-columns: 1fr; /* Stack items vertically */
+    }
+    
+    .actions {
+      flex-direction: column; /* Stack action buttons vertically */
+    }
+    
+    .edit-button, .share-button, .download-button { /* Make buttons full width */
+      width: 100%;
+      text-align: center;
+    }
+  }
+  
+  /* Container for the embedded mixer component */
+  .mixer-container {
+    margin-top: 2rem;
+    width: 100%;
+  }
+  
+  .mixer-container h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    position: relative; /* For ::after pseudo-element */
+  }
+  
+  /* Decorative underline for mixer heading */
+  .mixer-container h2:after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 50px;
+    height: 3px;
+    background: linear-gradient(90deg, #F14A21 0%, #F7861C 100%); /* Theme gradient */
+  }
+  
+  /* Container for the main soundscape image */
+  .soundscape-image-container {
+    margin: 0 auto; /* Center horizontally */
+    width: 100%;
+    height: 180px;
+    overflow: hidden; /* Hide overflowing parts of the image */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #000; /* Black background if image fails to load */
+  }
+  
+  .soundscape-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Scale image to cover the container */
+    display: block;
+    transition: transform 0.3s ease; /* Smooth zoom effect on hover */
+  }
+  
+  .soundscape-image:hover {
+    transform: scale(1.02); /* Slight zoom on hover */
+  } 

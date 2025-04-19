@@ -130,12 +130,44 @@ dist
 .pnp.*
 
 # sound server files
-server/public/sounds
+# Exclude the sounds directory except for specific files
+server/public/sounds/*
+# Exclude all audio files
 *.wav
 *.mp3
 *.ogg
 *.m4a
-*.wav
-*.mp3
-*.ogg
-*.m4a
+
+# But allow these specific files
+!server/public/sounds/0_1744650905570.mp3
+!server/public/sounds/0_1744650905653.mp3
+!server/public/sounds/0_1744650905662.mp3
+!server/public/sounds/0_1744650905679.mp3
+!server/public/sounds/0_1744650905684.mp3
+!server/public/sounds/0_1744651370208.mp3
+!server/public/sounds/0_1744651370225.mp3
+!server/public/sounds/0_1744651370237.mp3
+!server/public/sounds/0_1744650905655.mp3
+!server/public/sounds/0_1744651370220.mp3
+!server/public/sounds/13_1744651370202.mp3
+!server/public/sounds/0_1744645731568.mp3
+!server/public/sounds/0_1744645731763.mp3
+!server/public/sounds/0_1744645731773.mp3
+!server/public/sounds/0_1744645731788.mp3
+!server/public/sounds/0_1744645731796.mp3
+!server/public/sounds/0_1744645731802.mp3
+!server/public/sounds/0_1744998591346.mp3
+!server/public/sounds/0_1744998591349.mp3
+!server/public/sounds/0_1744998591354.mp3
+!server/public/sounds/0_1744998591360.mp3
+!server/public/sounds/0_1744998591369.mp3
+!server/public/sounds/0_1744998591374.mp3
+!server/public/sounds/0_1745000222212.mp3
+!server/public/sounds/0_1745000222324.mp3
+!server/public/sounds/0_1745000222328.mp3
+!server/public/sounds/0_1745000222334.mp3
+!server/public/sounds/0_1745000222337.mp3
+!server/public/sounds/0_1745000222343.mp3
+
+# DS-Store
+.DS_Store

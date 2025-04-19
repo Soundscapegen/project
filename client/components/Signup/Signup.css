@@ -1,0 +1,42 @@
+.container {
+    margin-top: 50px; /* Add space above the signup form */
+}
+
+/* Container for the 'Or continue with' text and lines */
+.another {
+    display: flex;
+    flex-direction: row;
+    gap: 15px; /* Space between elements */
+    margin-left: 55px; /* Align with input fields perhaps? */
+    color: #797979; /* Grey text color */
+}
+
+/* Decorative line used as a separator */
+.dash2 {
+    width: 120px;
+    height: 2px;
+    background: #F4671F; /* Theme color */
+    border-radius: 9px; /* Rounded ends */
+    
+}
+
+/* Align the line vertically with the text */
+.dash2 {
+    margin-top: 10px;
+}
+
+/* Container for the Google icon/button */
+.google {
+    display: flex;
+    justify-content: center; /* Center the icon horizontally */
+    margin-top: 20px;
+    font-size: 40px; /* Size of the Google icon */
+    margin-bottom: 25px;
+    cursor: pointer; /* Indicate it's clickable */
+}
+
+.google img {
+    margin-top: 15px;
+    width: 280px;
+    height: 40px;
+}

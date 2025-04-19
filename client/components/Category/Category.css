@@ -1,0 +1,88 @@
+.category-container { /* Style for the category container, uses flexbox to align the categories */
+    display: flex; 
+    flex-direction: column;
+    margin-top: 20px;
+    width: 100%;
+    gap: 20px;
+}
+
+/* Base style for category buttons */
+.category-button { 
+    text-align: center;
+    font-family: Poppins;
+    font-size: 16px;
+    font-weight: 700;
+    background-color: white;
+    border: solid black;
+    padding: 8px 15px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.3s ease 0s; /* Smooth transition for hover/active states */
+    width: 100%;
+    max-width: 250px; /* Limit button width */
+}
+
+/* Hover state for category buttons */
+.category-button:hover { 
+    background: var(--Gradient); /* Use CSS variable for gradient */
+    color: white;
+    border: solid #F4671F;
+}
+
+/* Active state (when clicked) for category buttons */
+.category-button:active { 
+    background: var(--Gradient);
+    color: white;
+    border: solid #F4671F;
+}
+
+/* Styles for the subcategory list */
+.subcategory ul { 
+    list-style-type: none; /* Remove default bullet points */
+    font-size: 14px;
+    font-weight: 500;
+    font-family: Poppins;
+    margin-top: 8px;
+    padding-left: 0; /* Remove default padding */
+    margin-left: 0; /* Remove default margin */
+    width: 100%;
+    max-width: 250px; /* Match category button width */
+}
+
+/* Styles for individual subcategory items */
+.subcategory ul li { 
+    transition: all 0.2s ease; /* Smooth transition for hover state */
+    margin-bottom: 12px;
+    cursor: pointer;
+    padding: 6px 12px;
+    border-radius: 4px;
+    position: relative; /* Needed for potential pseudo-elements or positioning */
+    white-space: normal; /* Allow text wrapping */
+    word-wrap: break-word; /* Break long words if necessary */
+}
+
+/* Hover state for subcategory items */
+.subcategory ul li:hover { 
+    color: #F4671F;
+    background-color: #f9f9f9; /* Subtle background change on hover */
+}
+
+/* Style for the currently selected subcategory */
+.subcategory-button.selected { 
+    color: #F4671F !important; /* Ensure color overrides default styles */
+    font-weight: 700;
+    border-left: 3px solid #F4671F; /* Add a visual indicator (left border) */
+    background-color: #FAF0ED; /* Distinct background for selected item */
+    margin-left: 0;
+    padding: 6px 12px 6px 9px; /* Adjust padding to account for border */
+    width: 100%;
+}
+
+/* Style for the main category button when it's associated with the selected subcategory */
+.selected-category { 
+    background-color: #F4671F !important; /* Ensure background color overrides default */
+    color: white !important; /* Ensure text color overrides default */
+    font-weight: bold;
+    box-shadow: 0 2px 5px rgba(244, 103, 31, 0.3); /* Add shadow for emphasis */
+}
+

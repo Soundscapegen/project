@@ -9,6 +9,9 @@ model = "mistral-large-latest"
 
 client = Mistral(api_key=API_KEY)
 
+""" 
+Test file for the Mistral model to ensure it is working correctly. Run this file to check if the model is working.
+"""
 chat_response = client.chat.complete(
     model= model,
     messages = [

@@ -1,0 +1,89 @@
+/* Commented out old styles - consider removing if no longer needed */
+/* .mixer-container {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    align-items: center;
+    gap: 16px;
+  }
+  .mixer-heading {
+    text-align: center;
+  }  
+*/
+
+/* Main container for the mixer page */
+.mixer-container {
+  margin: 0 auto; /* Center the container horizontally */
+  padding: 0;
+  padding-top: 20px; /* Add space at the top */
+
+}
+  
+/* Container for loading state */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 300px; /* Fixed height for loading state */
+  width: 100%;
+  text-align: center;
+}
+  
+/* Spinner animation element */
+.loading-container .spinner {
+  border: 5px solid rgba(244, 103, 31, 0.1); /* Light border */
+  border-radius: 50%;
+  border-top: 5px solid #F4671F; /* Theme color top border for spin effect */
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite; /* Apply spin animation */
+  margin-bottom: 20px;
+}
+  
+/* Loading text */
+.loading-container p {
+  font-size: 18px;
+  color: #555; /* Dark grey text */
+  margin-top: 10px;
+  font-family: 'Poppins', sans-serif;
+}
+  
+/* Spinner animation keyframes */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+  
+/* Container for error message */
+.error-container {
+    text-align: center;
+    padding: 3rem 1rem;
+    background-color: #f8f8f8; /* Light grey background */
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    width: 100%;
+}
+  
+.error-container h2 {
+    color: #F14A21; /* Theme color for error title */
+    margin-bottom: 1rem;
+}
+  
+/* Back button style (likely used in error state) */
+.back-button {
+    display: inline-block;
+    margin-top: 1.5rem;
+    padding: 0.75rem 1.5rem;
+    background: linear-gradient(180deg, #F14A21 0%, #F4671F 75%, #F7861C 100%); /* Theme gradient */
+    color: white;
+    border-radius: 24px; /* Pill shape */
+    text-decoration: none; /* Remove underline */
+    font-weight: bold;
+    transition: transform 0.2s ease; /* Smooth hover transition */
+}
+  
+/* Hover effect for back button */
+.back-button:hover {
+    transform: translateY(-2px); /* Lift effect */
+}  

@@ -1,0 +1,200 @@
+.track-card {
+    font-family: Poppins;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 88%;
+    height: auto; /* Height adjusts to content */
+    padding: 15px 0px 15px 20px; /* Padding top/bottom, left/right */
+    border-bottom: 0.2px rgba(141, 141, 141, 0.25) solid; /* Subtle bottom border */
+    margin-left: 40px; /* Indentation */
+    gap: 25px; /* Space between image and info */
+    transition: all 0.3s ease 0s; /* Smooth transition for hover */
+}
+
+.track-card:hover {
+    transition: all 0.3s ease 0s;
+    background:rgba(202, 202, 202, 0.30); /* Subtle background change on hover */
+}
+
+/* Container for the image/play control */
+.track-control {
+    position: relative; /* Needed for absolute positioning of overlay icon/progress bar */
+    cursor: pointer;
+    /*display: flex;
+    flex-direction: column;
+    gap: 15px; */ /* Commented out - consider removing if not needed */
+}
+
+.track-control img {
+    width: 250px;
+    height: 100%;
+    object-fit: cover; /* Scale image nicely */
+    box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.25); /* Image shadow */
+}
+
+/* Container for track title, description, tags, stats */
+.info-track {
+    width: 70%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.date {
+    font-size: 14px;
+    color: #868686;
+    font-weight: 275; /* Lighter font weight */
+    font-style: italic;
+    align-self: flex-end; /* Push date to the right */
+}
+
+.info-track h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.track-description {
+    color: #868686;
+    font-size: 16px;
+    font-weight: 400;
+    padding-bottom: 10px;
+}
+
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 14px;
+    font-weight: 400;
+    padding-top: 10px;
+    gap: 6px;
+    align-items: center;
+}
+
+.tag-label {
+    margin-right: 8px;
+    color: #555;
+}
+  
+.tag-pill {
+    background-color: #f0f0f0;
+    padding: 4px 10px;
+    border-radius: 20px; /* Rounded pill shape */
+    margin-right: 2px;
+    font-size: 0.85rem;
+    color: #333;
+    display: inline-block;
+}
+
+.stats {
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Space between stats */
+    padding-top: 18px;
+    align-self: flex-end; /* Push stats to the right */
+
+}
+
+.stat {
+    display: flex;
+    align-items: center;     
+    justify-content: center; 
+    font-size: 14px;       
+    color: #868686;   
+}
+
+.statsIcon {
+    color: #F4671F;
+    width: 19px;
+    height: 19px;
+    margin-right: 5px;
+}
+
+/* Play icon displayed over the image */
+.play-icon-overlay {
+    position: absolute; /* Position over the track image */
+    top: 50%;
+    left: 50%;
+    transform: translate(-56%, -60%); /* Center the icon precisely */
+    font-size: 3rem;
+    color: #ffff;
+    opacity: 1; /* Initially visible */
+    text-shadow: 0 0 10px rgba(0,0,0,0.7); /* Shadow for better visibility */
+    pointer-events: none; /* Prevent icon from blocking clicks on the image */
+    transition: opacity 0.3s ease;
+}
+  /* Show play icon on hover (currently opacity is 1, this rule does nothing) */
+  .track-control:hover .play-icon-overlay {
+    opacity: 100; /* Redundant, consider removing or changing initial opacity */
+  }
+  /* Container for the thin progress bar at the bottom of the image */
+  .progress-bar-container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background-color: #ccc; /* Background of the progress track */
+    margin-top: 10px; /* Should probably be 0 or removed due to absolute positioning */
+    cursor: pointer;
+  }
+  
+  /* Initially hide progress bar (currently opacity is not set, so it's visible) */
+  .track-card:hover .progress-bar-container {
+    opacity: 1; /* Make visible on hover (redundant if always visible) */
+  }
+
+  /* The actual progress fill element */
+  .progress-bar {
+    height: 100%;
+    background-color: #ff5722; /* Progress fill color */
+    width: 0%; /* Initial width is 0 */
+    transition: width 0.1s linear; /* Smooth transition for progress changes */
+  }
+  
+/* Specific styles for soundscape cards */
+.soundscape-card {
+  border: 2px solid #F4671F; /* Distinct border for soundscapes */
+  box-shadow: 0 4px 12px rgba(244, 103, 31, 0.15); /* Theme-colored shadow */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Animate transform and shadow */
+}
+
+.soundscape-card:hover {
+  transform: translateY(-5px); /* Lift effect on hover */
+  box-shadow: 0 8px 20px rgba(244, 103, 31, 0.25); /* Stronger shadow on hover */
+}
+
+/* This seems unused, consider removing */
+.soundscape-badge {
+  display: none;
+}
+
+/* Badge positioned over the top-right of the image for soundscapes */
+.soundscape-badge-overlay {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: linear-gradient(90deg, #F14A21 0%, #F7861C 100%); /* Theme gradient */
+  color: white;
+  font-size: 0.8rem;
+  font-weight: bold;
+  padding: 4px 12px;
+  border-radius: 12px; /* Rounded badge */
+  z-index: 2; /* Ensure badge is above image/gradient overlay */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow for badge */
+}
+
+/* Add a gradient overlay for soundscape cards */
+/* Uses ::after pseudo-element to create the overlay */
+.soundscape-card .track-control:after {
+  content: ''; /* Required for pseudo-elements */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, rgba(244, 103, 31, 0.1), rgba(244, 103, 31, 0.3)); /* Semi-transparent theme gradient */
+  pointer-events: none; /* Allow clicks to pass through the overlay */
+}
+  
