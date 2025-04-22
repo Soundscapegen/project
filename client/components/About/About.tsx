@@ -21,29 +21,36 @@ const About = () => {
       <div className="team-members">
         <h3>The Team</h3>
         <div className="team-grid">
-          <div className="team-member">
+          <a href="https://www.linkedin.com/in/tylerjaramillopritchard/" target="_blank" rel="noopener noreferrer" className="team-member">
             <div className="member-avatar">TJP</div>
             <h4>Tyler Jaramillo-Pritchard</h4>
-          </div>
-          <div className="team-member">
+          </a>
+          <a href="https://www.linkedin.com/in/brandon-wilner/" target="_blank" rel="noopener noreferrer" className="team-member">
             <div className="member-avatar">BW</div>
             <h4>Brandon Wilner</h4>
-          </div>
-          <div className="team-member">
+          </a>
+          <a href="https://www.linkedin.com/in/roseyangina" target="_blank" rel="noopener noreferrer" className="team-member">
             <div className="member-avatar">RA</div>
             <h4>Rosey Angina</h4>
-          </div>
-          <div className="team-member">
+          </a>
+            <a href="https://www.linkedin.com/in/tue-tran-098297241/" target="_blank" rel="noopener noreferrer" className="team-member">
             <div className="member-avatar">TT</div>
-            <h4>True Tran</h4>
-          </div>
-        </div>
+            <h4>Tue Tran</h4>
+          </a>
+        </div> 
       </div>
 
       <div className="contact">
         <h5>Contact Us</h5>
         <p>
-          For questions, support, or feedback, reach us at <a href="">link</a>
+          For questions, support, or feedback, reach us at{" "}
+          <a
+            href="https://github.com/Soundscapegen/project"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            link
+          </a>
         </p>
       </div>
     </div>

@@ -308,9 +308,12 @@ def auto_generate_keywords(min_keywords: int = 6):
         dict: { "style": str, "keywords": List[str] }
     """
     styles = [
-        "lo-fi", "jazzy", "cinematic", "upbeat", "classical", "ambient",
-        "melancholic piano", "folk acoustic", "grunge", "funky",
-        "orchestral", "violin", "angelic", "serene", "uplifting", "forest sounds",
+        "forest", "rainy day", "beach", "desert wind", "train ride",
+        "subway station", "mountain morning", "thunderstorm", "city night",
+        "campfire", "jungle", "ocean waves", "countryside", "windy meadow",
+        "cave echoes", "library silence", "snowy landscape", "underwater",
+        "bustling marketplace", "summer night",
+        "lo-fi", "jazzy", "cinematic", "upbeat", "classical", "ambient", "angelic", "serene", "uplifting", "forest sounds",
         "sunset vibes", "midnight jazz"
     ]
 
@@ -320,7 +323,7 @@ def auto_generate_keywords(min_keywords: int = 6):
     You are a creative sound designer. The selected style is "{selected_style}".
 
     Generate exactly {min_keywords} sound-relevant keywords that match or are inspired by this style.
-    These will be used to search a sound database, so be descriptive, musical, and creative. 
+    These will be used to search a sound database, so be descriptive, and creative. 
 
     Avoid repeating the style name in every keyword. Think of instruments, moods, textures, ambiences, or audio scenes that fit.
 
