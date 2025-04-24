@@ -8,7 +8,7 @@ A web application that generates soundscapes from natural language. Powered by M
 
 ## 🚀 Key Features
 
-- **Natural Language Input** – Describe a scene or feeling, and get a soundscape instantly.
+- **Natural Language Input** – Describe a scene and get a soundscape instantly.
 - **LLM-Powered Keyword Extraction** – Uses Mistral to extract meaningful sound cues from user prompts.
 - **Interactive Audio Mixer** – Adjust volume, pan, or replace individual sounds in real-time.
 - **Auto-Generator** – Instantly create randomized soundscapes for inspiration.
@@ -16,9 +16,10 @@ A web application that generates soundscapes from natural language. Powered by M
 
 ## 🛠 Tech Stack
 
-- **Frontend:** Next.js (React), Tailwind CSS, Tone.js
-- **Backend:** Node.js (Express), Flask (Python NLP service)
+- **Frontend:** Next.js (React)
+- **Backend:** Node.js (Express), Python + Flask, Knex.js
 - **Infrastructure:** Docker, Redis, PostgreSQL, AWS EC2, Vercel
+- **Other Libraries:** Tone.js, FFmpeg
 - **APIs:** Mistral API, Freesound API, Unsplash API, Google OAuth
 
 ## 🧩 Installation and Setup
