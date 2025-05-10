@@ -1,0 +1,1195 @@
+/* Import Poppins font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* Apply Poppins to all elements in the mixer */
+.mixer-page {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    font-family: 'Poppins', sans-serif;
+}
+
+.mixer-component {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 90px;
+    margin-top: 50px;
+}
+
+/* Section for Audio Player style */
+.music-player-container {
+    width: 25%;
+    height: 710px;  
+    border-radius: 18px;
+    background: linear-gradient(159deg, #BDB9B9 13.44%, #949494 86.56%);
+    /* Neumorphic box shadow for depth */
+    box-shadow: 1px 1px 2px 0px rgba(166, 166, 166, 0.30) inset,
+                -1px -1px 2px 0px rgba(120, 120, 120, 0.50) inset,
+                -2px 2px 4px 0px rgba(120, 120, 120, 0.20),
+                2px -2px 4px 0px rgba(120, 120, 120, 0.20),
+                -2px -2px 4px 0px rgba(166, 166, 166, 0.90),
+                2px 2px 5px 0px rgba(120, 120, 120, 0.90);
+    margin-top: 10px;
+    padding-top: 10px;
+}
+
+.player-screen {
+    width: 95%;
+    height: auto;
+    border-radius: 6px;
+    background: #1a1a1a;
+    /* Neumorphic inset shadow for screen effect */
+    box-shadow: 1px 1px 2px 0px rgba(255, 255, 255, 0.30) inset,
+                -1px -1px 2px 0px rgba(100, 100, 100, 0.50) inset,
+                -1px 1px 2px 0px rgba(100, 100, 100, 0.20),
+                1px -1px 2px 0px rgba(100, 100, 100, 0.20),
+                -1px -1px 2px 0px rgba(255, 255, 255, 0.90),
+                1px 1px 3px 0px rgba(100, 100, 100, 0.90);
+    padding-bottom: 15px;
+    margin: auto;
+}
+
+.title-container { 
+    width: 90%;
+    display:inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    margin-left: 15px;
+}
+
+.title {
+    color: #FFF;
+    font-family: 'Poppins', sans-serif;
+    font-size: 19px;
+    font-weight: 600;
+    /* Subtle text shadow for readability on dark background */
+    text-shadow: 0 0 5px #6e6e6e, 0 0 10px #4a4a4a;
+    margin-bottom: 5px;
+    margin-top: 10px;
+    /* Apply scrolling animation */
+    animation: title 15s linear infinite;
+}
+
+/* Scrolling animation for long titles */
+@keyframes title{
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+.img-container {
+    width: 95%;
+    height: 180px;
+    margin: 0 auto;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden; /* Ensures image stays within bounds */
+}
+
+.audio-image {
+    width: 100%;
+    height: 100%;
+    max-height: 187px;
+    max-width: 350px;
+    margin: 0 auto;
+    display: block;
+    box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.25);
+    object-fit: cover; /* Cover the container without distortion */
+    margin-left: 15px;
+    border: 1px solid #000;
+    background: #8D98AB; /* Fallback background color */
+}
+
+.zoom-icon {
+    position: absolute; /* Position relative to img-container */
+    bottom: 6px;          
+    right: -6px;   
+    cursor: pointer;         
+}
+
+.zoom-icon:hover {
+    transform: scale(1.1);
+}
+
+.audio-progress {
+    width: 90%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    margin-left: 16px;
+}
+
+.audio-progress p {
+    font-size: 10px;
+    color: white;
+    text-shadow: 0 0 5px #6e6e6e, 0 0 10px #4a4a4a;
+}
+
+.audio-range {
+    width: 100%;
+    height: 5px;
+    accent-color: orangered; /* Sets the color of the slider thumb and track */
+    outline: none;
+    margin: 10px 5px;
+}
+
+.audio-waveform {
+    width: 90%;
+    height: 90px;
+    opacity: 0.53; /* Slight transparency */
+    background: #DEDBDB;
+    margin: auto;
+    background: linear-gradient(135deg, #F2F2F2 100%, #FFF 0%);
+    filter: blur(0.5px); /* Subtle blur effect */
+    border-radius: 3px;
+}
+
+.wave {
+    width: 100%;
+    height: 100%;
+}
+
+.waveform-display {
+    width: 100%;
+    height: 100%;
+}
+
+.player-controls-container {
+    width: 95%;
+    height: auto;
+    margin: 22px auto 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 75px;
+}
+
+.change-function {
+    width: 130px;
+    height: 43px;
+    border-radius: 2px;
+    background: #7A7A7A;
+    box-shadow: 2px 2px 2px 0px rgba(0, 0, 0, 0.25) inset; /* Inset shadow for pressed effect */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.change-btn {
+    width: 117px;
+    height: 33px;
+    border-radius: 2px;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.13) 0%, rgba(0, 0, 0, 0.00) 100%), #CFD0D2; /* Gradient for button depth */
+    box-shadow: 2px 2px 1px 2px rgba(0, 0, 0, 0.40); /* Standard button shadow */
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1px;
+    transition: all 0.3s ease-in-out;
+}
+
+.change {
+    color: #5C5C5C;
+    font-family: Helvetica;
+    font-size: 20px;
+    font-weight: 700;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.change:hover {
+    transform: scale(1.05);
+}
+
+.change.active {
+    color: orangered;
+}
+
+.player-controls {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    gap: 5%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-icon {
+    width: 68px;
+    height: 68px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #c0c0c0, #919191); /* Gradient for button appearance */
+    border: 0.5px solid #8a8989;
+    /* Neumorphic shadow for raised button effect */
+    box-shadow: 
+        5px 5px 10px rgba(0, 0, 0, 0.3), 
+        -5px -5px 10px rgba(255, 255, 255, 0.4), 
+        inset 2px 2px 4px rgba(255, 255, 255, 0.3), 
+        inset -2px -2px 4px rgba(0, 0, 0, 0.4);
+    transition: transform 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
+    position: relative;
+    cursor: pointer;
+}
+
+/* Style for button press */
+.player-controls button:active {
+    transform: scale(0.95); /* Slight shrink effect */
+    /* Neumorphic shadow for pressed button effect */
+    box-shadow: 
+        inset 5px 5px 10px rgba(0, 0, 0, 0.4), 
+        inset -5px -5px 10px rgba(255, 255, 255, 0.5);
+}
+
+/* Styles for the larger central play/pause button */
+.large {
+    width: 120px;
+    height: 120px;
+    background: linear-gradient(145deg, #9f9f9f, #B0B0B0);
+    /* Neumorphic inset shadow for the main button */
+    box-shadow: 
+        inset 2px 2px 4px rgba(255, 255, 255, 0.5), 
+        inset -2px -2px 4px rgba(0, 0, 0, 0.4),
+        6px 6px 8px rgba(0, 0, 0, 0.3),
+        -6px -6px 8px rgba(255, 255, 255, 0.2);
+    filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.5)); /* Additional subtle shadow */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+ /* Section for audio mixer */
+ .mixer {
+    width: auto;
+    height: auto;
+    background: linear-gradient(6deg, #979797 11.24%, #BCBCBC 49.54%, #8E8E8E 95.61%);
+    /* Neumorphic shadow for the main mixer body */
+    box-shadow: -1px 1px 2px 0px rgba(255, 255, 255, 0.30) inset,
+                1px -1px 2px 0px rgba(170, 170, 170, 0.50) inset,
+                2px 2px 4px 0px rgba(170, 170, 170, 0.20),
+                -2px -2px 4px 0px rgba(170, 170, 170, 0.20),
+                2px -2px 4px 0px rgba(255, 255, 255, 0.90),
+                -2px 2px 5px 0px rgba(170, 170, 170, 0.90);
+}
+
+    /* Section for header */
+.header-audio-mixer{
+    display: flex;
+    align-items: center;
+    gap: 40px; 
+    width: auto;
+    height: 77px;
+    border-radius: 2px;
+    background: linear-gradient(6deg, #979797 11.24%, #BCBCBC 49.54%, #8E8E8E 95.61%);
+}
+
+.mixer-icon {
+    margin-left: 33px;
+}
+
+.logo-mixer {
+    width: 40px;
+    height: 40px;
+}
+  
+.mix-button-container {
+    width: 111px;
+    height: 43px;
+    border-radius: 2px;
+    background: #7A7A7A;
+    box-shadow: 2px 2px 2px 0px rgba(0, 0, 0, 0.25) inset; /* Inset shadow */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+  
+.mix-button {
+    width: 100px;
+    height: 33px;
+    border-radius: 2px;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.13) 0%, rgba(0, 0, 0, 0.00) 100%), #CFD0D2; /* Button gradient */
+    box-shadow: 2px 2px 1px 2px rgba(0, 0, 0, 0.40); /* Button shadow */
+    margin: auto;
+  }
+  
+.mix-title {
+    margin-top: 5px;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-size: 20px;
+    font-weight: 500;
+    /* Gradient text color */
+    background: var(--Gradient, linear-gradient(180deg, #F14A21 0%, #F4671F 75%, #F7861C 100%));
+    background-clip: text;
+    -webkit-background-clip: text; /* Required for gradient text in Webkit browsers */
+    -webkit-text-fill-color: transparent; /* Required for gradient text in Webkit browsers */
+}
+  
+.display-text {
+    width: 164px;
+    height: 43px;
+    border: 1px solid #000;
+    background-color: #000;
+    margin-left: 330px;
+}
+  
+.display-text p {
+    color: #278F7C;
+    font-family: 'Poppins', sans-serif;
+    font-size: 24px;
+    font-weight: 500;
+    text-align: center;
+    margin-top: 8px;
+}
+
+    /* Mixer Channels  */
+.mixer-channels-container {
+    display: flex;
+    flex-direction: row;
+    background: linear-gradient(135deg, #989898 100%, #8A8A8A 0%);
+}
+
+/* Individual channel strip */
+.channel-container {
+    width: 114px;
+    height: 639px;
+    background: linear-gradient(135deg, #989898 100%, #8A8A8A 0%);
+    /* Neumorphic shadow for channel strip */
+    box-shadow: -1px 1px 2px 0px rgba(162, 162, 162, 0.30) inset, 1px -1px 2px 0px rgba(128, 128, 128, 0.50) inset, 3px 3px 6px 0px rgba(128, 128, 128, 0.20), -3px -3px 6px 0px rgba(128, 128, 128, 0.20), 3px -3px 6px 0px rgba(162, 162, 162, 0.90), -3px 3px 8px 0px rgba(128, 128, 128, 0.90);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    font-family: "Share Tech Mono"; /* Monospaced font for digital look */
+}
+
+.mixer-btn {
+    margin-top: 5px;
+    width: 108px;
+}
+
+.display-screen {
+    width: 98%;
+    height: 54px;
+    border: 1px solid #000;
+    background-color: #000;
+    color: #278F7C;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.display-screen p {
+    font-family: 'Poppins', sans-serif;
+    font-size: 24px;
+    font-weight: 500;
+}
+
+.knob-container {
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 97%;
+    margin-left: 1px;
+}
+
+.track-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 10px;
+    background: #0D0F10;
+    /* Neumorphic inset shadow for the pan track */
+    box-shadow: 1px -1px 2px 0px rgba(21, 24, 26, 0.30), -1px 1px 2px 0px rgba(5, 6, 6, 0.50), -1px -1px 2px 0px rgba(5, 6, 6, 0.20) inset, 1px 1px 2px 0px rgba(5, 6, 6, 0.20) inset, -1px 1px 2px 0px rgba(21, 24, 26, 0.90) inset, 1px -1px 3px 0px rgba(5, 6, 6, 0.90) inset;
+    position: relative;
+}
+
+.pan-label{
+    font-size: 0.8rem;
+    color: #7C7E80;
+    padding: 0;
+}
+
+/* Style reset for slider */
+.track-slider {
+    -webkit-appearance: none; /* Remove default webkit styles */
+    appearance: none; /* Remove default styles */
+    width: 100%;
+    height: 10px;
+    background: #0D0F10; /* Match track wrapper background */
+    border-radius: 5px;
+    outline: none;
+    position: relative;
+    z-index: 0; /* Ensure thumb is above track */
+}
+
+/* Slider thumb styling */
+.track-slider::-webkit-slider-thumb {
+    appearance: none; /* Remove default thumb styles */
+    cursor: pointer;
+    width: 21px;
+    height: 21px;
+    border-radius: 50%;
+    background: linear-gradient(146deg, #111315 15.24%, #414344 100%);
+    /* Neumorphic shadow for the thumb */
+    box-shadow: 1px 1px 2px 0px rgba(63, 66, 69, 0.30) inset, 
+                -1px -1px 2px 0px rgba(19, 20, 21, 0.50) inset,
+                -1px 1px 2px 0px rgba(19, 20, 21, 0.20),
+                1px -1px 2px 0px rgba(19, 20, 21, 0.20),
+                -1px -1px 2px 0px rgba(63, 66, 69, 0.90),
+                1px 1px 3px 0px rgba(19, 20, 21, 0.90);
+}
+
+.track-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.05);
+}
+
+.buttons-container {
+    width: 99%;
+    margin-top: 22px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 10px;
+}
+
+.button {
+    width: 47px;
+    height: 19px;
+    border-radius: 2px;
+    background: #7A7A7A;
+    box-shadow: 2px 2px 2px 0px rgba(0, 0, 0, 0.25) inset; /* Inset shadow for button housing */
+    overflow: hidden; /* Ensure inner button stays within bounds */
+}
+
+.btn {
+    width: 42px;
+    height: 14px;
+    border-radius: 2px;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.13) 0%, rgba(0, 0, 0, 0.00) 100%), #CFD0D2; /* Inner button gradient */
+    box-shadow: 2px 2px 1px 2px rgba(0, 0, 0, 0.40); /* Inner button shadow */
+    display: flex;
+    margin-left: 2px;
+    margin-top: 2px;
+}
+
+.btn button {
+    border: none;
+    background: transparent;
+    color: #5C5C5C;
+    text-align: center;
+    font-size: 8px;
+    font-weight: 700;
+    margin: auto;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+}
+
+.btn button:hover {
+    transform: scale(1.2);
+    color: orangered;
+}
+
+.mute.active {
+    color: orangered;
+}
+
+/* Volume modification */
+.mixer-controls {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 98%;
+    height: 75%;
+    position: relative;
+}
+
+.volume-meter-container {
+    height: 95%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    margin: auto 18px;
+}
+
+.led-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    /* Radial gradient for LED effect */
+    background: radial-gradient(50% 50% at 50% 50%, #54FA5B 0%, #7ED781 58.5%, #698269 87.9%, rgba(104, 255, 110, 0.34) 100%);
+    box-shadow: 1px 1px 2px 3px rgba(0, 0, 0, 0.25) inset; /* Inset shadow for depth */
+}
+
+.red {
+    /* Red LED gradient */
+    background: radial-gradient(50% 50% at 50% 50%, #fa5454 0%, #e33f3f 58.5%, #b70707 87.9%, rgba(204, 133, 133, 0.207) 100%);
+}
+
+.volume-meter {
+    width: 8px;
+    height: 100%;
+    border-radius: 4px;
+    overflow: hidden; /* Keep the fill inside */
+    position: relative;
+    stroke: #7C7E80; /* Border color? Might not be visible */
+    box-shadow: 1px 4px 4px 0px #000 inset; /* Dark inset shadow for meter housing */
+}
+
+.meter-fill {
+    width: 100%;
+    opacity: 0.4;
+    border-radius: 2px;
+    background: linear-gradient(180deg, #F14A21 0%, #F4671F 75%, #F7861C 100%); /* Volume level gradient */
+    position: absolute;
+    bottom: 0; /* Fill starts from bottom */
+    transition: height 0.2s ease-in-out; /* Smooth animation for volume changes */
+}
+
+.volume-container {
+    width: 22px;
+    height: 95%;
+    background: #696969;
+    /* Neumorphic inset shadow for the fader track */
+    box-shadow: 1px -1px 2px 0px rgba(54, 57, 63, 0.30), 
+                -1px 1px 2px 0px rgba(26, 27, 29, 0.50),
+                -1px -1px 2px 0px rgba(26, 27, 29, 0.20) inset,
+                1px 1px 2px 0px rgba(26, 27, 29, 0.20) inset,
+                -1px 1px 2px 0px rgba(54, 57, 63, 0.90) inset,
+                1px -1px 3px 0px rgba(26, 27, 29, 0.90) inset;
+    position: relative;
+    margin-left: 27px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.control-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+    width: 4px; /* Width of the fader slot */
+    height: 95%;
+    transform: rotate(180deg); /* Orient the slot vertically */
+    stroke: #403F3F; /* Slot color? */
+    box-shadow: 2px 4px 4px 0px #000 inset; /* Dark inset shadow for slot */
+}
+
+/* Vertical volume slider */
+.control-volume {
+    width: 435px; /* Length of the slider track (used as width when rotated) */
+    appearance: none; /* Remove default styles */
+    transform: rotate(90deg); /* Rotate to vertical */
+    background: transparent; /* Hide default track */
+    position: absolute; /* Position over the visual track */
+    cursor: pointer;
+}
+
+/* Vertical slider thumb */
+.control-volume::-webkit-slider-thumb {
+    appearance: none; /* Remove default thumb styles */
+    width: 42px; /* Width of the fader cap */
+    height: 20px; /* Height of the fader cap */
+    background: linear-gradient(145deg, silver, #ccc); /* Fader cap gradient */
+    border-radius: 3px;
+    border: 1px solid #888;
+    cursor: pointer;
+    /* Shadow for fader cap */
+    box-shadow: 
+        2px 2px 5px rgba(0, 0, 0, 0.5),
+        inset -2px -2px 5px rgba(0, 0, 0, 0.4),
+        inset 2px 2px 5px rgba(255, 255, 255, 0.2);
+}
+
+/* Section for channel label */
+.channel-label {
+    border-radius: 2px;
+    width: 100%;
+    height: 32px;
+    opacity: 0.76; /* Slightly transparent */
+    padding-bottom: 3px;
+    background: #FFF;
+    /* Neumorphic inset shadow for label area */
+    box-shadow: -1px -1px 2px 0px rgba(194, 194, 194, 0.5) inset, 
+                -1px 1px 2px 0px rgba(98, 42, 12, 0.20),
+                1px -1px 2px 0px rgba(98, 42, 12, 0.20),
+                1px 1px 3px 0px rgba(98, 42, 12, 0.90);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    position: relative;
+    overflow: hidden; /* Hide overflowing text/buttons */
+}
+
+.label {
+    color: #000;
+    text-align: center;
+    text-shadow: 1px 0px 0px rgba(0, 0, 0, 0.53); /* Subtle text shadow */
+    font-size: 14px;
+    font-weight: 400;
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    overflow: hidden; /* Hide overflowing text */
+    text-overflow: ellipsis; /* Add ellipsis (...) for overflow */
+    max-width: 90px; /* Limit width to prevent pushing button */
+    padding: 0 2px;
+    /* Allow two lines at most with ellipsis */
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Limit to 2 lines */
+    -webkit-box-orient: vertical;
+    white-space: normal; /* Allow wrapping */
+    line-height: 1.1; /* Adjust line height for two lines */
+    max-height: 30px; /* Corresponds to line-height * lines */
+}
+
+.channel-label.master-label {
+    justify-content: center;
+}
+
+.delete-track-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+    border-radius: 50%;
+}
+
+.delete-track-btn:hover {
+    opacity: 1;
+    background-color: rgba(244, 103, 31, 0.1);
+}
+
+.delete-track-btn svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* Section for master channel */
+.master-digital p {
+    color: #F4681F; /* Master channel digital display color */
+}
+
+.master-mute {
+    width: 80%;
+    margin-bottom: 24px;
+}
+
+.master-btn {
+    width: 90%;
+    margin: auto;
+    margin-top: 2px;
+}
+
+.master-btn button{
+    font-size: 10px;
+}
+
+.master-label {
+    background-color: #F4681F; /* Distinct background for master label */
+    /* Master label shadow */
+    box-shadow: 1px 1px 2px 0px rgba(255, 166, 50, 0.30) inset, 
+                -1px -1px 2px 0px rgba(98, 42, 12, 0.50) inset,
+                -1px 1px 2px 0px rgba(98, 42, 12, 0.20),
+                1px -1px 2px 0px rgba(98, 42, 12, 0.20),
+                -1px -1px 2px 0px rgba(255, 166, 50, 0.90),
+                1px 1px 3px 0px rgba(98, 42, 12, 0.90);
+    justify-content: center;
+}
+
+/* Master fader thumb */
+.master-control::-webkit-slider-thumb {
+    background: linear-gradient(180deg, #ab3518 0%, #ba4c15 75%, #c26915 100%);
+    border: 1px solid #933401;  
+} 
+
+.master-label p {
+    color: white;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+/* Information component section */
+.information-container {
+    display: flex;
+    flex-direction: column;
+    width: 87%;
+    margin: 70px auto; /* Center the container */
+}
+
+.mixer-dash {
+    border: 1px #D1D1D1 solid; /* Simple divider */
+}
+
+.information-wrapper {
+    display: flex;
+    margin-top: 30px;
+    gap: 50px;
+}
+
+.information {
+    width: 75%;
+}
+
+.infor-title {
+    font-weight: 900;
+    color: #F4681F;
+    font-size: 2.3rem;
+    word-break: break-word; /* Prevent long words from overflowing */
+    line-height: 1.1;
+    font-family: 'Poppins', sans-serif; 
+}
+
+.infor-description {
+    margin-top: 10px;
+    line-height: 1.4;
+    color: #696969;
+}
+
+.infor-tags {
+    margin-top: 20px;
+    font-size: 1.3rem;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif; 
+}
+
+.infor-sounds-list {
+    margin: 1rem 0;           
+    padding-left: 1rem;     
+    list-style-type: disc;   
+}
+  
+.infor-sounds-list li {
+    margin: 0.25rem 0;        
+    font-size: 0.95rem;       
+}
+
+.functions {
+    width: 25%;
+
+}
+
+.credit {
+    margin: 30px auto;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+
+}
+
+.credit-icon svg {
+    width: 50px;
+    height: 50px;
+}
+
+.credit p {
+    text-align: center;
+    font-weight: 300;
+    font-size: 0.8rem;
+    line-height: 1.4;
+    color: #696969;
+    font-family: 'Poppins', sans-serif; 
+}
+
+.func-container {
+    margin: 30px auto;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: 15px;
+    border: 2px solid #F4671F;
+    width: 60%;
+    padding: 11px 5px;
+    border-radius: 15px;
+    cursor: pointer;
+}
+
+.final {
+    margin-top: 40px;
+}
+
+.func-container svg {
+    width: 22px;
+}
+
+.func-container button {
+    background: transparent;
+    font-family: Poppins;
+    font-size: 14px;
+    cursor: pointer;
+
+}
+
+.func-container:hover {
+    transform: scale(1.1);
+}
+
+.func-container button:hover {
+    color: #F4671F;
+    font-weight: 700;
+}
+
+/* Finalize Section */
+.modal-overlay {
+    position: fixed; /* Cover the entire viewport */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Ensure it's above other content */
+  }
+
+  /* Modal content box */
+  .modal-content {
+    border: 2px solid #f4671f; 
+    background-color: white;
+    padding: 24px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px; /* Limit maximum width */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-family: 'Poppins', sans-serif;
+  }
+
+  .modal-content h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #333;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+  }
+  
+  .form-group {
+    margin-bottom: 16px;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 500;
+    color: #555;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  .form-group textarea {
+    min-height: 100px;
+    resize: vertical; /* Allow vertical resizing only */
+  }
+  
+  .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 24px;
+  }
+  
+  .modal-button {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  .modal-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
+  .modal-button.cancel {
+    background-color: #e0e0e0;
+    color: #333;
+  }
+  
+  .modal-button.cancel:hover:not(:disabled) {
+    background-color: #d0d0d0;
+  }
+  
+  .modal-button.save {
+    /* Specific gradient for save button */
+    background: linear-gradient(180deg, #1F80F7 0%, #1F68F7 75%, #1F50F7 100%);
+    color: white;
+    border: none;
+  }
+  
+  .modal-button.search {
+    /* Specific gradient for search button */
+    background: linear-gradient(180deg, #F14A21 0%, #F7861C 100%);
+    color: white;
+    border: none;
+  }
+  
+  .modal-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .success-message {
+    text-align: center;
+    padding: 20px;
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  .success-message p {
+    font-size: 18px;
+    color: #4CAF50;
+    margin-bottom: 20px;
+  }
+  
+  .soundscape-info {
+    margin-top: 20px;
+    text-align: left;
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  .soundscape-info p {
+    color: #333;
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+  
+  .soundscape-link {
+    display: flex;
+    align-items: center;
+    background-color: #f5f5f5;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+  }
+  
+  .soundscape-link a {
+    flex: 1; /* Allow link to take up available space */
+    overflow: hidden;
+    text-overflow: ellipsis; /* Add ... for long links */
+    white-space: nowrap; /* Prevent link wrapping */
+    color: #F4671F;
+    text-decoration: none;
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  .copy-button {
+    background-color: #F4671F;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 10px;
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  .copy-button:hover {
+    background-color: #F14A21;
+  }
+  
+  .modal-button.view {
+    background-color: #F4671F;
+    color: white;
+  }
+  
+  .modal-button.close {
+    background-color: #f5f5f5;
+    color: #333;
+  }
+  
+  .error-message {
+    text-align: center;
+    color: #f44336;
+    font-weight: 500;
+    padding: 10px 0 20px;
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  .error-message p {
+    margin-bottom: 16px;
+  }
+
+.mute {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+}
+
+.add-sound {
+  margin-top: 10px;
+  background-color: #fff;
+  border: 2px solid #f4671f;
+  color: #f4671f;
+  transition: all 0.3s ease;
+}
+
+.add-sound:hover {
+  background-color: #f4671f;
+  color: white;
+}
+
+.add-sound button {
+  color: inherit;
+}
+
+.add-sound svg {
+  margin-right: 8px;
+}
+
+.sound-result {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 15px;
+  margin: 10px 0 20px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.sound-result h3 {
+  margin-top: 0;
+  color: #f4671f;
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.sound-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.sound-duration, .sound-license {
+  background-color: #f1f1f1;
+  padding: 3px 8px;
+  border-radius: 12px;
+  color: #666;
+  font-size: 12px;
+  display: inline-block;
+}
+
+.sound-result p {
+  color: #555;
+  font-size: 14px;
+  line-height: 1.4;
+  margin-bottom: 10px;
+}
+
+.preview-audio {
+  margin-top: 10px;
+}
+
+.preview-label {
+  display: block;
+  font-size: 14px;
+  font-weight: bold;
+  color: #555;
+  margin-bottom: 5px;
+}
+
+.preview-audio audio {
+  width: 100%;
+  height: 32px;
+  border-radius: 16px;
+}
+
+/* Add styles for the player image container and waveform overlay */
+
+.player-image-container {
+  position: relative;
+  width: 100%;
+  height: 180px;
+  margin: 0 auto;
+  overflow: hidden; /* Hide parts of image/waveform outside container */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #000; /* Black background for image area */
+}
+
+.player-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Scale image to cover container */
+  object-position: center; /* Center the image */
+}
+
+.waveform-overlay {
+  position: absolute; /* Overlay on top of the image */
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.2); /* Semi-transparent overlay */
+}
+
+.audio-mixer-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 300px;
+  width: 100%;
+  text-align: center;
+}
+
+.audio-mixer-loading .spinner {
+  border: 5px solid rgba(244, 103, 31, 0.1); /* Light border */
+  border-radius: 50%;
+  border-top: 5px solid #F4671F; /* Colored top border for spinning effect */
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite; /* Apply spin animation */
+  margin-bottom: 20px;
+}
+
+.audio-mixer-loading p {
+  font-size: 18px;
+  color: #555;
+  margin-top: 10px;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* CSS animation for the spinner */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+
+
+
+

@@ -1,0 +1,225 @@
+@import url('https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Merienda:wght@300..900&family=Quicksand:wght@300..700&display=swap');
+
+/* Define CSS custom property (variable) for the gradient */
+:root {
+    --Gradient: linear-gradient(180deg, #F14A21 0%, #F4671F 75%, #F7861C 100%);
+}
+
+/* Basic reset for margin and padding */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 15px 6%; /* Padding top/bottom and left/right */
+    background-color: white;
+    box-shadow: 0px 1px 16.100000381469727px 2px rgba(0, 0, 0, 0.25); /* Subtle bottom shadow */
+    border-top-left-radius: 8px; /* Round top corners (if needed) */
+    border-top-right-radius: 8px;
+}
+
+img {
+    cursor: pointer;
+    width: 112.54px;
+    height: 71px;
+}
+
+nav {
+    list-style: none;
+}
+
+.navLinks li {
+    display: inline-block; /* Arrange list items horizontally */
+    padding: 0px 30px; /* Spacing between nav items */
+}
+
+.nav-btn {
+    transition: all 0.3s ease 0s; /* Smooth transition for hover effects */
+    font-family: Inria Sans;
+    font-weight: 700;
+    font-size: 20px;
+    color: #1E1E1E;
+    text-decoration: none; /* Remove underline from links */
+    background: transparent;
+}
+
+.nav-btn:hover {
+    padding: 8px; /* Add padding on hover */
+    border-radius: 24px; /* Round corners on hover */
+    color: white;
+    background: var(--Gradient); /* Use gradient variable for background */
+    transition: all 0.3s ease 0s;
+    cursor: pointer;
+}
+
+.profile {
+    display: flex;
+    justify-content: center;
+}
+
+.profile ul {
+    display: flex;
+    align-items: center;
+}
+
+.profile ul li {
+    display: inline-block;
+    align-items: center;
+    align-items: center;
+    padding: 0px 8px;
+}
+
+.profile li {
+    font-family: Inria Sans;
+    font-weight: 400;
+    font-size: 20px;
+    color: #1E1E1E;
+    text-decoration: none;
+}
+
+/* Style for login button hover */
+.login:hover {
+    font-weight: 800;
+    cursor: pointer;
+
+}
+
+/* Vertical separator line */
+.dash {
+    width: 22px;
+    transform: rotate(90deg); /* Rotate the border to make it vertical */
+    border: 2px #F4671F solid;
+}
+
+
+.register {
+    padding: 8px;
+    border-radius: 24px;
+    border: 2px #F4671F solid;
+    color: #F4671F;
+}
+
+.register:hover {
+    background: var(--Gradient);
+    color: white;
+    cursor: pointer;
+}
+
+/* Full screen overlay for modals/popups */
+.screenOverlay {
+    position: fixed; /* Position relative to viewport */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Ensure overlay is above other content */
+  }
+
+/* Content box within the overlay */
+.content {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3); /* Shadow for the content box */
+    position: relative; /* Needed for absolute positioning of close button */
+    max-width: 90%; /* Limit maximum width */
+    /* min-width: 90%; */ /* Commented out - consider if min-width is needed */
+}
+  
+
+/* Close button (X) for modals */
+.xClose {
+    position: absolute; /* Position relative to the .content container */
+    top: 15px;
+    right: 20px;
+    font-size: 35px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    color: black;
+}
+
+.xClose:hover {
+    color: #F4671F;
+}
+
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+  
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid black;
+}
+
+/* Scale effect on avatar hover */
+.avatar:hover {
+    transform: scale(1.1);
+}
+
+.username {
+    font-size: 16px;
+    font-weight: bold;
+    padding: 8px 16px;
+    border-radius: 20px;
+    background: var(--Gradient);
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.username:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Style for dropdown menu (user profile actions) */
+.dropdown-menu {
+    position: absolute; /* Position relative to the profile container or header */
+    top: 70px; /* Position below the navbar */
+    right: 5px;
+    background: var(--Gradient); /* Use gradient variable */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3); /* Dropdown shadow */
+    color: white;
+    border-radius: 8px;
+    padding: 20px;
+    min-width: 150px; /* Minimum width for the dropdown */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 1000; /* Ensure dropdown is above other content (except maybe modals) */
+}
+  
+  
+/* Logout button within dropdown */
+.logout-btn {
+    background: #ffffff;
+    color: black;
+    border: none;
+    padding: 5px 10px;
+    margin-top: 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: 0.3s; /* Smooth transition for hover */
+    width: 100%; /* Make button fill dropdown width */
+}
+  
+/* Logout button hover state */
+.logout-btn:hover {
+    background: #e60000; /* Red background on hover */
+}

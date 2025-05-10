@@ -1,0 +1,164 @@
+.about-container {
+    font-family: Poppins;
+    margin-top: 10%;
+    min-height: 100vh;
+    margin-top: 10%;
+    min-height: 100vh;
+    background-color: #F4F4F4;
+    box-shadow: 0px -1px 5.2px 0px rgba(0, 0, 0, 0.25);
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center content horizontally */
+    gap: 20px; /* Space between direct children */
+    padding: 40px 20px; /* Padding top/bottom and left/right */
+}
+
+.logo-container h3 {
+    font-family: Poppins;
+    font-size: 1.5rem;
+}
+
+/* Style for subheadings */
+.contact h5 {
+    text-align: center;
+    font-size: 1.3rem;
+    margin-bottom: 10px;    /* spacing below */
+}
+
+.about-information {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    /* margin-right: 50px; */ /* Commented out - consider removing */
+    margin: 0;
+}
+
+/* Container for logo and title */
+.logo-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 20px; /* Space between logo and text */
+    margin-bottom: 20px;
+}
+
+/* Main heading style */
+.about-container h2 {
+    padding-top: 10px;
+    font-size: 2.5rem;
+    color: #1E1E1E; /* Dark text color */
+    margin-bottom: 30px;
+}
+
+/* Paragraph styling */
+.about-container p {
+    max-width: 800px; /* Limit text width for readability */
+    text-align: left; /* Align text to the left */
+    line-height: 1.8; /* Increase line spacing */
+    color: #1E1E1E;
+    font-size: 1.1rem;
+    margin: 0 auto 40px; /* Center paragraph block and add bottom margin */
+    padding: 0 20px; /* Padding left/right */
+}
+
+/* Styling for manual line breaks within paragraphs */
+.about-container p br {
+    display: block; /* Ensure <br> acts as a block element */
+    margin: 1em 0; /* Add vertical space around the break */
+    content: ""; /* Required for ::before/::after, might not be needed here but standard practice */
+}
+
+/* Container for the team members section */
+.team-members {
+    width: 100%;
+    max-width: 1200px; /* Limit width of the section */
+    margin: 40px 0; /* Vertical margin */
+}
+
+/* Team section heading */
+.team-members h3 {
+    text-align: center;
+    font-size: 2rem;
+    color: #1E1E1E;
+    margin-bottom: 30px;
+}
+
+/* Grid layout for team members */
+.team-grid {
+    display: grid;
+    /* Responsive grid: creates columns min 250px wide, auto-fitting as many as possible */
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px; /* Space between grid items */
+    padding: 20px;
+}
+
+/* Individual team member card */
+.team-member {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px; /* Space between avatar and name */
+    padding: 20px;
+    background: white;
+    border-radius: 15px; /* Rounded corners */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Subtle card shadow */
+    transition: transform 0.3s ease; /* Smooth transition for hover */
+    text-decoration: none;        /* Remove underline from link */
+    color: inherit;               /* Keep default text color */
+}
+
+/* Hover effect for team member card */
+.team-member:hover {
+    transform: translateY(-5px); /* Lift effect */
+}
+
+/* Circular avatar background */
+.member-avatar {
+    width: 80px;
+    height: 80px;
+    background: var(--Gradient); /* Theme gradient */
+    border-radius: 50%; /* Make it circular */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+/* Team member name */
+.team-member h4 {
+    color: #1E1E1E;
+    font-size: 1.2rem;
+    text-align: center;
+    margin: 0;
+}
+
+/* General H3 styling within the about container */
+.about-container h3 {
+    font-size: 2rem;
+    color: #1E1E1E;
+    margin: 30px 0 20px; /* Vertical margins */
+}
+
+/* Link styling */
+.about-container a {
+    color: #F4671F; /* Theme color for links */
+    text-decoration: none; /* Remove underline */
+    transition: color 0.3s ease; /* Smooth color transition on hover */
+}
+
+/* Link hover state */
+.about-container a:hover {
+    color: #F14A21; /* Darker shade on hover */
+}
+
+/* Footer styling */
+footer {
+    margin-top: auto; /* Push footer to the bottom if content is short */
+    padding: 20px;
+    text-align: center;
+    color: #868686; /* Grey text color */
+}

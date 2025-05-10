@@ -1,42 +1,552 @@
+@import url('https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Merienda:wght@300..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Quicksand:wght@300..700&display=swap');
+
+/* Global CSS variable for the theme gradient */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-html,
-body {
-  max-width: 100vw;
-  overflow-x: hidden;
+  --Gradient: linear-gradient(180deg, #F14A21 0%, #F4671F 75%, #F7861C 100%);
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0; /* Remove default body margin */
+  /* Default font stack with system fallbacks */
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  /* Improve font rendering on specific browsers */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+code {
+  /* Specific font stack for code elements */
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/* Basic reset for all elements */
 * {
-  box-sizing: border-box;
+  margin: 0;
   padding: 0;
+}
+
+
+/* Styles for the introductory section (likely on the homepage) */
+.introduction {
+  font-family: Poppins; /* Use Poppins font */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+/* Style for the main icon in the introduction */
+.sound-icon {
+  width: 150px;
+  height: 150px;
+  margin: 25px 0;
+  padding-bottom: 10px;
+  color: #F4671F; /* Theme color */
+}
+
+/* Styling for the main description text */
+.description {
+  margin-top: -30px; /* Negative margin to pull it closer to the icon */
+  font-size: 20px;
+  width: 664px; /* Fixed width */
+  line-height: 1.5; /* Improve readability */
+  font-weight: 400;
+  word-wrap: break-word; /* Allow long words to break */
+}
+
+/* Styling for the main search box */
+.search-box {
+  display: flex;
+  align-items: center;
+  width: 700px; 
+  margin: 30px auto; /* Center the search box */
+  height: 60px;
+  z-index: 1;
+  padding: 0 8px; /* Padding left/right */
+  gap: 8px; /* Space between input and button */
+  border-radius: 30px; /* Rounded corners for pill shape */
+  background: #F6F6F6; /* Light grey background */
+  border: 1px solid #E0E0E0; /* Subtle border */
+  transition: all 0.3s ease; /* Smooth transition for focus state */
+}
+
+/* Style changes when the search box or its children have focus */
+.search-box:focus-within {
+  border-color: #F4671F; /* Theme color border on focus */
+  box-shadow: 0 0 6px rgba(244, 103, 31, 0.3); /* Theme color shadow on focus */
+}
+
+/* Input field within the search box */
+input[type=text] {
+  width: 100%;
+  border: none;
+  background-color: transparent; /* Show the search-box background */
+  margin-left: 15px;
+  color: #5e5d5d;
+  font-size: 20px;
+  font-weight: 400;
+  outline: none; /* Remove default focus outline */
+  padding: 12px 0;
+}
+
+/* Search button within the search box */
+.search-box button {
+  border: none;
+  background-color: transparent;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease; /* Smooth transition for hover */
+  margin-right: 10px;
+}
+
+/* Hover effect for the search button */
+.search-box button:hover {
+  transform: scale(1.05); /* Slight zoom effect */
+}
+
+/* Search icon within the button */
+.search-icon {
+  color: #5e5d5d;
+  transition: color 0.3s ease; /* Smooth color transition */
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Change icon color on button hover */
+.search-box button:hover .search-icon {
+  color: #F4671F; /* Theme color */
+}
+
+/* Global horizontal divider style */
+.dash3 {
+  width: 92%; /* Not full width */
+  border: 1px #D1D1D1 solid; /* Light grey border */
+  margin-bottom: 20px;
+}
+
+/* Base style for H2 headings (potentially overridden elsewhere) */
+h2 {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+/* Styling for the 'Popular' section title */
+.popular {
+  margin-left: 100px; /* Indentation */
+  margin-top: 60px;
+  margin-bottom: 50px;
+}
+
+/* Container for the main content area (e.g., category + tracks) */
+.popular-container {
+  display: flex;
+  flex-direction: row;
+  gap: 20px; /* Space between category panel and track list */
+  width: 92%; /* Match width of dash3? */
+}
+
+/* Right panel containing the track list */
+.right-panel {
+  flex: 1; /* Take up remaining space */
+  display: flex;
+  flex-direction: column;
+  margin-left: 20px;
+}
+
+/* Container for the tracks within a category */
+.category-tracks {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-left: 30px; /* Indentation for the track list */
+}
+
+/* General container for tracks */
+.tracks {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* Title for a category section */
+.category-title {
+  color: #868686; /* Grey color */
+  font-family: Poppins;
+  font-size: 19px;
+  font-weight: 700;
+  margin-top: 20px;
+  margin-bottom: 15px;
+}
+
+/* Container holding selected category and filter icon */
+.track-subcate-container {
+  width: 100%;
+  display: flex;
+  justify-content: space-between; /* Push elements to edges */
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap; /* Allow wrapping on smaller screens */
+}
+
+/* Container for the chosen category pill */
+.chosenCategory {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px; /* Space if multiple categories were allowed */
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+/* Filter icon style */
+.filterIcon {
+  width: 32px;
+  height: 32px;
+}
+
+/* Wrapper for the category pill and its remove button */
+.chosen-wrapper {
+  display: flex;
+  align-items: center;
+  position: relative; /* Needed for absolute positioning of remove button */
+}
+
+/* Styling for the selected category pill */
+.chosen {
+  color: #FFF;
+  text-align: center;
+  font-family: "Inria Sans";
+  font-size: 20px;
+  font-weight: 400;
+  background: var(--Gradient); /* Theme gradient */
+  padding: 8px 36px 8px 16px; /* Asymmetric padding (right side accommodates remove button) */
+  border-radius: 29px; /* Pill shape */
+  border: 2px solid #F4671F; /* Theme color border */
   margin: 0;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+/* Remove button (X) inside the category pill */
+.remove-category {
+  position: absolute;
+  right: 10px; /* Position inside the right padding of .chosen */
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  height: 24px;
+  width: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%; /* Circular button */
+  padding: 0;
+  line-height: 1; /* Prevent extra vertical space */
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
+/* Subtle background change on remove button hover */
+.remove-category:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Re-styling track card specifically for this context (potential override) */
+.track-card {
+  font-family: Poppins;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  height: auto;
+  padding: 20px;
+  border-bottom: 0.2px rgba(141, 141, 141, 0.25) solid; /* Subtle separator */
+  margin: 0 auto 10px; /* Center and add bottom margin */
+  gap: 25px;
+  transition: all 0.3s ease 0s; /* Smooth hover transition */
+  box-sizing: border-box; /* Include padding and border in element's total width/height */
+}
+
+/* Default category pill style (when none is selected?) */
+.chosen-default {
+  color: #FFF;
+  text-align: center;
+  font-family: "Inria Sans";
+  font-size: 20px;
+  font-weight: 400;
+  background: var(--Gradient);
+  padding: 8px 16px; /* Standard padding */
+  border-radius: 29px;
+  border: 2px solid #F4671F;
+}
+
+/* Container for error messages */
+.error-container {
+  max-width: 800px;
+  margin: 20px auto; /* Center */
+  padding: 15px;
+  animation: fadeIn 0.3s ease-in-out; /* Apply fade-in animation */
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); } /* Start transparent and slightly up */
+  to { opacity: 1; transform: translateY(0); } /* Fade in and move down */
+}
+
+/* Styling for the error message box */
+.error-message {
+  background-color: #fff1f0; /* Light red background */
+  border-left: 4px solid #ff4d4f; /* Red left border for emphasis */
+  border-radius: 8px;
+  padding: 18px 20px;
+  color: #cf1322; /* Dark red text */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); /* Subtle shadow */
+  font-family: Poppins, sans-serif;
+}
+
+.error-message p {
+  margin: 0 0 10px 0;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* Make the first paragraph (likely the main error) slightly bolder/larger */
+.error-message p:first-child {
+  font-weight: 500;
+  font-size: 17px;
+}
+
+/* Container for suggestion buttons within the error message */
+.suggestion-buttons {
+  display: flex;
+  flex-wrap: wrap; /* Allow buttons to wrap */
+  gap: 10px;
+  margin-top: 15px;
+}
+
+/* Styling for individual suggestion buttons */
+.suggestion-button {
+  background: #fafafa;
+  border: 1px solid #d9d9d9;
+  border-radius: 20px; /* Pill shape */
+  padding: 8px 14px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s; /* Smooth transitions */
+  font-family: "Inria Sans", sans-serif;
+  color: #333;
+}
+
+/* Hover state for suggestion buttons */
+.suggestion-button:hover {
+  background: #fff7e6; /* Light orange background */
+  border-color: #F4671F; /* Theme color border */
+  color: #F4671F; /* Theme color text */
+  transform: translateY(-1px); /* Slight lift effect */
+}
+
+/* Active state (while clicking) for suggestion buttons */
+.suggestion-button:active {
+  transform: translateY(0); /* Reset lift effect */
+}
+
+/* Header section within the error message */
+.error-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  gap: 10px; /* Space between icon and text */
+}
+
+/* Error icon color */
+.error-header svg {
+  color: #ff4d4f; /* Match border color */
+}
+
+.error-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #cf1322; /* Match text color */
+}
+
+/* Title for the suggestions section */
+.suggestion-title {
+  margin-top: 15px;
+  font-weight: 500;
+  color: #555; /* Dark grey text */
+}
+
+/* Loading indicator styles */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 40px auto; /* Center */
+  text-align: center;
+}
+
+/* Spinner element */
+.spinner {
+  border: 4px solid rgba(244, 103, 31, 0.1); /* Light background circle */
+  border-radius: 50%;
+  border-top: 4px solid #F4671F; /* Theme color top border for spin effect */
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite; /* Apply spin animation */
+  margin-bottom: 15px;
+}
+
+/* Spin animation definition */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Container for the 'Creating Soundscape' state */
+.creating-soundscape-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 30px auto;
+  max-width: 600px; /* Limit width */
+  text-align: center;
+}
+
+.creating-soundscape-container h2 {
+  margin-bottom: 20px;
+}
+
+/* Button used to trigger soundscape creation */
+.create-soundscape-button {
+  background: var(--Gradient); /* Theme gradient */
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s; /* Smooth transitions */
+  display: inline-flex; /* Allows aligning icon and text */
+  align-items: center;
+  justify-content: center;
+  min-width: 200px; /* Ensure minimum button width */
+}
+
+/* Hover effect for create button */
+.create-soundscape-button:hover {
+  transform: translateY(-2px); /* Lift effect */
+  box-shadow: 0 4px 8px rgba(244, 103, 31, 0.2); /* Theme color shadow */
+}
+
+/* Disabled state for create button */
+.create-soundscape-button:disabled {
+  opacity: 0.7; /* Make it look faded */
+  cursor: not-allowed; /* Indicate non-interactive */
+  transform: none; /* Disable hover transform */
+}
+
+/*Autogen button styles */
+.searchAndButtonWrapper {
+  position: relative;
+  width: fit-content;
+  gap: 1px;
+  margin: 30px auto;
+  display: flex;
+  align-items: center;
+}
+
+.autogenPill {
+  height: 60px;
+  width: 160px; 
+  margin-left: -100px; 
+  transform: translateX(100%); 
+  z-index: 2;
+  color: #FFF;
+  text-align: center;
+  font-family: "Inria Sans";
+  font-size: 18px;
+  font-weight: 600;
+  background: var(--Gradient);
+  padding: 8px 24px;
+  border-radius: 29px;
+  border: 2px solid #F4671F;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  transition: background 0.2s ease;
+}
+
+.autogenPill,
+.search-box button {
+  box-sizing: border-box;
+}
+
+.autogenPill:hover {
+  background: linear-gradient(90deg, #ff7e5f, #feb47b);
+}
+
+.autogen-message {
+  font-style: italic;
+  color:  #000000; 
+  font-size: 14px;
+  margin-top: 2px;
+}
+
+.dots span {
+  animation: blink 1.2s infinite;
+  opacity: 0;
+}
+
+.dots span:nth-child(1) {
+  animation-delay: 0s;
+}
+.dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes blink {
+  0%   { opacity: 0; }
+  50%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.autogenPill:disabled {
+  background: #ccc;
+  border-color: #ccc;
+  cursor: not-allowed;
+}
+
+.button-spinner {
+  border: 2px solid rgba(244, 103, 31, 0.3); /* Light orange border */
+  border-top: 2px solid #f4671f; /* Bold orange top for spinning effect */
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }

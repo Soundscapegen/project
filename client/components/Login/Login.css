@@ -1,0 +1,131 @@
+@import url('https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Merienda:wght@300..900&family=Quicksand:wght@300..700&display=swap');
+
+/* Main container for the login form */
+.container {
+    display: flex;
+    flex-direction: column;
+    margin: auto; /* Center horizontally */
+    width: 480px;
+    margin-top: 15px; /* Space above the form */
+    background: rgb(226, 226, 226); /* Light grey background */
+    border-radius: 10px; /* Rounded corners */
+}
+
+/* Reset default button border */
+button {
+    border: none;
+}
+
+.header {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center header content */
+    gap: 9px; /* Space between title and underline */
+    width: 100%;
+    margin-top: 30px;
+}
+
+.text {
+    color: #F4671F; /* Theme color for title */
+    font-size: 30px;
+    font-weight: 700;
+    font-family: Inria Sans;
+}
+
+/* Decorative underline for the header text */
+.underline {
+    width: 30px;
+    height: 4px;
+    background: #F4671F; /* Theme color */
+    border-radius: 9px; /* Rounded ends */
+}
+
+/* Container for all input fields */
+.inputs {
+    margin-top: 35px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px; /* Space between input fields */
+}
+
+/* Style for each input row (icon + input field) */
+.input {
+    display: flex;
+    align-items: center; /* Vertically align icon and input */
+    margin: auto; /* Center horizontally */
+    width: 400px;
+    height: 45px;
+    background: #eaeaea; /* Slightly darker grey for input background */
+    border-radius: 6px; /* Rounded corners for input area */
+}
+
+/* Styling for the input field icon */
+.icon {
+    margin: 0px 30px; /* Space around the icon */
+}
+
+/* Actual input element styling */
+.input input {
+    height: 50px;
+    width: 400px;
+    background: transparent; /* Make input background transparent to show .input background */
+    border: none;
+    outline: none; /* Remove default focus outline */
+    color: #797979; /* Grey text color */
+    font-size: 15px;
+}
+
+/* Styling for the 'Forgot Password?' link */
+.forgotPass {
+    padding-left: 45px; /* Align with the start of input fields */
+    margin-top: 20px;
+    color: #797979; /* Grey text color */
+    font-size: 13px;
+}
+
+/* Make the 'Click Here' part distinct */
+.forgotPass span {
+    color: #F4671F; /* Theme color */
+    cursor: pointer;
+}
+
+/* Container for submit/action buttons */
+.submitContainer {
+    display: flex;
+    gap: 30px; /* Space between buttons */
+    margin: 20px auto; /* Center buttons horizontally */
+}
+
+/* Base style for submit/action buttons */
+.submit {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 150px;
+    height: 40px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    color: white;
+    background: #F4671F; /* Theme color background */
+    border-radius: 50px; /* Pill shape */
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+/* Specific styling for the signup button (if different) */
+.signupButton {
+    background-color: #797979; /* Grey background for secondary action */
+}
+
+/* Hover effect for buttons */
+.submit:hover {
+  transform: scale(1.05); /* Slight zoom effect */
+  box-shadow: 0px 4px 10px; /* Add shadow on hover */
+}
+
+.google img {
+    margin-top: 15px;
+    width: 280px;
+    height: 40px;
+}
